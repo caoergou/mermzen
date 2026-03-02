@@ -1,9 +1,9 @@
 // ── Shared application state ────────────────────────────────────────
 // ── Hand-drawn font presets ──────────────────────────────────────────
 export const HAND_FONTS = {
-  virgil:  { label: 'Virgil',  family: "'Virgil'",  url: 'https://cdn.jsdelivr.net/gh/excalidraw/virgil/Virgil.woff2' },
-  caveat:  { label: 'Caveat',  family: "'Caveat'",  url: null },
-  kalam:   { label: 'Kalam',   family: "'Kalam'",   url: null },
+  virgil:  { label: 'Virgil',  family: "'Virgil'",  url: 'https://cdn.jsdelivr.net/gh/excalidraw/virgil/Virgil.woff2', cssUrl: null },
+  caveat:  { label: 'Caveat',  family: "'Caveat'",  url: null, cssUrl: 'https://fonts.googleapis.com/css2?family=Caveat:wght@400&display=swap' },
+  kalam:   { label: 'Kalam',   family: "'Kalam'",   url: null, cssUrl: 'https://fonts.googleapis.com/css2?family=Kalam:wght@400&display=swap' },
 };
 
 function loadHandDrawnPrefs() {

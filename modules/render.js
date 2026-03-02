@@ -158,6 +158,94 @@ function handleRenderError(err, code) {
 // ── SVG font inlining ───────────────────────────────────────────────
 const fontDataCache = {};
 
+// ── Xiaolai SC (小赖字体) subset embedding ────────────────────────────
+const XIAOLAI_CSS_URL = 'https://cdn.jsdelivr.net/npm/@chinese-fonts/xiaolai@3.0.0/dist/Xiaolai/result.css';
+let _xiaolaiRules = null;
+
+async function fetchXiaolaiRules() {
+  if (_xiaolaiRules !== null) return _xiaolaiRules;
+  try {
+    const resp = await fetch(XIAOLAI_CSS_URL, { cache: 'force-cache' });
+    if (!resp.ok) { _xiaolaiRules = []; return []; }
+    const css = await resp.text();
+    const rules = [];
+    const re = /@font-face\s*\{([^}]+)\}/g;
+    let m;
+    while ((m = re.exec(css)) !== null) {
+      const block = m[1];
+      const srcM = block.match(/src:[^;]*url\(['"]?([^'")\s]+)['"]?\)/i);
+      const ucrM = block.match(/unicode-range:\s*([^;]+)/i);
+      if (srcM && ucrM) {
+        const absUrl = new URL(srcM[1], XIAOLAI_CSS_URL).href;
+        rules.push({ url: absUrl, unicodeRange: ucrM[1].trim() });
+      }
+    }
+    _xiaolaiRules = rules;
+    return rules;
+  } catch (e) {
+    _xiaolaiRules = [];
+    return [];
+  }
+}
+
+function codePointInUnicodeRange(cp, rangeStr) {
+  for (const part of rangeStr.split(',')) {
+    const r = part.trim();
+    if (!/^[Uu]\+/.test(r)) continue;
+    const hex = r.slice(2);
+    if (hex.includes('-')) {
+      const [lo, hi] = hex.split('-').map(h => parseInt(h, 16));
+      if (cp >= lo && cp <= hi) return true;
+    } else if (hex.includes('?')) {
+      const lo = parseInt(hex.replace(/\?/g, '0'), 16);
+      const hi = parseInt(hex.replace(/\?/g, 'F'), 16);
+      if (cp >= lo && cp <= hi) return true;
+    } else {
+      if (cp === parseInt(hex, 16)) return true;
+    }
+  }
+  return false;
+}
+
+async function buildXiaolaiCssForSvg(svgEl) {
+  // Extract all text from the SVG to find needed characters
+  const textContent = Array.from(svgEl.querySelectorAll('text, tspan, foreignObject'))
+    .map(el => el.textContent).join('');
+
+  // Collect non-ASCII code points that need the Chinese font
+  const neededCps = new Set();
+  for (const ch of textContent) {
+    const cp = ch.codePointAt(0);
+    if (cp > 127) neededCps.add(cp);
+  }
+  if (!neededCps.size) return '';
+
+  const rules = await fetchXiaolaiRules();
+  if (!rules.length) return '';
+
+  // Find which font chunks cover the needed characters
+  const neededRules = [];
+  for (const rule of rules) {
+    for (const cp of neededCps) {
+      if (codePointInUnicodeRange(cp, rule.unicodeRange)) {
+        neededRules.push(rule);
+        break;
+      }
+    }
+  }
+  if (!neededRules.length) return '';
+
+  // Fetch and embed only the needed font chunks (with unicode-range so browser uses them correctly)
+  let css = '';
+  for (const { url, unicodeRange } of neededRules) {
+    const dataUri = await fetchFontAsBase64(url);
+    if (dataUri) {
+      css += "@font-face { font-family: 'Xiaolai SC'; src: url('" + dataUri + "') format('woff2'); unicode-range: " + unicodeRange + "; font-display: swap; }\n";
+    }
+  }
+  return css;
+}
+
 async function fetchFontAsBase64(url) {
   if (fontDataCache[url]) return fontDataCache[url];
   try {
@@ -180,10 +268,27 @@ async function fetchFontAsBase64(url) {
   }
 }
 
+async function fetchWoff2UrlFromCss(cssUrl) {
+  try {
+    const resp = await fetch(cssUrl);
+    if (!resp.ok) return null;
+    const css = await resp.text();
+    // Prefer the latin subset; fall back to the first woff2 found
+    const latinBlock = css.match(/\/\* latin \*\/[\s\S]*?src:[^;]*url\(['"]?(https?:\/\/[^'"')]+\.woff2)['"]?\)/);
+    if (latinBlock) return latinBlock[1];
+    const anyBlock = css.match(/src:[^;]*url\(['"]?(https?:\/\/[^'"')]+\.woff2)['"]?\)/);
+    return anyBlock ? anyBlock[1] : null;
+  } catch (e) { return null; }
+}
+
 async function buildInlineFontCss() {
   if (!state.handDrawn) return '';
   const preset = HAND_FONTS[state.handDrawnFont] || HAND_FONTS.virgil;
-  const fontUrl = preset.url || 'https://cdn.jsdelivr.net/gh/excalidraw/virgil/Virgil.woff2';
+  let fontUrl = preset.url;
+  if (!fontUrl && preset.cssUrl) {
+    fontUrl = await fetchWoff2UrlFromCss(preset.cssUrl);
+  }
+  if (!fontUrl) return '';
   try {
     const dataUri = await fetchFontAsBase64(fontUrl);
     if (!dataUri) return '';
@@ -202,10 +307,15 @@ export async function inlineFontsIntoSvg(svgEl) {
   }
 
   if (state.handDrawn) {
-    const fontCss = await buildInlineFontCss();
-    if (fontCss) {
+    // Embed both the hand-drawn preset font AND Xiaolai SC (Chinese) in parallel
+    const [fontCss, xiaolaiCss] = await Promise.all([
+      buildInlineFontCss(),
+      buildXiaolaiCssForSvg(svgEl),
+    ]);
+    const combinedCss = [fontCss, xiaolaiCss].filter(Boolean).join('\n');
+    if (combinedCss) {
       const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
-      styleEl.textContent = fontCss;
+      styleEl.textContent = combinedCss;
       clone.insertBefore(styleEl, clone.firstChild);
     }
   }
@@ -226,9 +336,21 @@ export function svgToPngBlob(svgEl, scale) {
       });
 
       const svgData = new XMLSerializer().serializeToString(cloned);
-      const bbox = svgEl.getBoundingClientRect();
-      const width = bbox.width || 800;
-      const height = bbox.height || 600;
+      // Use natural SVG dimensions (not affected by zoom/pan transforms on parent)
+      let width, height;
+      try {
+        const vb = svgEl.viewBox.baseVal;
+        if (vb && vb.width > 0 && vb.height > 0) { width = vb.width; height = vb.height; }
+      } catch (e) {}
+      if (!width || !height) {
+        width = parseFloat(svgEl.getAttribute('width')) || 0;
+        height = parseFloat(svgEl.getAttribute('height')) || 0;
+      }
+      if (!width || !height) {
+        const bbox = svgEl.getBoundingClientRect();
+        width = bbox.width || 800;
+        height = bbox.height || 600;
+      }
       const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
       const url = URL.createObjectURL(svgBlob);
       const img = new Image();
