@@ -4,16 +4,23 @@ import { linter, lintGutter, setDiagnostics } from "@codemirror/lint";
 import { keymap } from "@codemirror/view";
 import { mermaid as mermaidLang } from "codemirror-lang-mermaid";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { state, dom } from './core.js';
+import { state } from './store.js';
+import { dom } from './dom.js';
 import { formatMermaidCode } from './formatter.js';
 
 let currentDiagnostics = [];
 let lintTimer = null;
 
+/**
+ * 获取编辑器当前代码
+ */
 export function getCode() {
   return state.editorView ? state.editorView.state.doc.toString() : '';
 }
 
+/**
+ * 清除所有诊断信息（错误提示）
+ */
 export function clearDiagnostics() {
   if (!state.editorView) return;
   currentDiagnostics = [];
@@ -28,6 +35,9 @@ function extractLineFromError(err) {
   return null;
 }
 
+/**
+ * 从错误对象推送诊断信息到编辑器
+ */
 export function pushDiagnosticFromError(msg, errObj) {
   if (!state.editorView) return;
   const lineNum = errObj ? extractLineFromError(errObj) : null;
@@ -52,6 +62,9 @@ export function pushDiagnosticFromError(msg, errObj) {
   state.editorView.dispatch(setDiagnostics(state.editorView.state, diag));
 }
 
+/**
+ * 滚动到指定行
+ */
 export function scrollToLine(lineNum) {
   if (!state.editorView) return;
   try {
@@ -64,6 +77,9 @@ export function scrollToLine(lineNum) {
   } catch (e) { /* line out of range */ }
 }
 
+/**
+ * 安排 Lint 检查（防抖）
+ */
 export function scheduleLint() {
   clearTimeout(lintTimer);
   lintTimer = setTimeout(async () => {
@@ -103,8 +119,9 @@ function buildEditorTheme(dark) {
 }
 
 /**
- * @param {string} initialCode
- * @param {(doc: string) => void} onDocChange - called on every document change
+ * 创建编辑器实例
+ * @param {string} initialCode - 初始代码
+ * @param {(doc: string) => void} onDocChange - 文档变更回调
  */
 export function createEditor(initialCode, onDocChange) {
   const extensions = [
@@ -134,6 +151,9 @@ export function createEditor(initialCode, onDocChange) {
   });
 }
 
+/**
+ * 格式化当前代码
+ */
 export function formatCode() {
   if (!state.editorView) return;
   const code = state.editorView.state.doc.toString();

@@ -1,9 +1,15 @@
-import { state, dom, showToast, btnSuccess, downloadFile } from './core.js';
+import { state } from './store.js';
+import { dom } from './dom.js';
+import { showToast, btnSuccess, downloadFile } from './utils.js';
 import { STRINGS } from './i18n.js';
 import { getCode } from './editor.js';
-import { inlineFontsIntoSvg, svgToPngBlob } from './render.js';
+import { inlineFontsIntoSvg, svgToPngBlob } from './export-utils.js';
 
-// ── Copy / Download ─────────────────────────────────────────────────
+// ── 复制 / 下载 ─────────────────────────────────────────────────
+
+/**
+ * 复制 PNG 图片到剪贴板
+ */
 export async function copyPng() {
   const svgEl = dom.preview.querySelector('svg');
   if (!svgEl) { showToast(STRINGS[state.currentLang].toastNoDiagram); return; }
@@ -13,6 +19,9 @@ export async function copyPng() {
   btnSuccess(dom.btnCopyPng);
 }
 
+/**
+ * 下载 SVG 文件
+ */
 export async function downloadSvg() {
   const svgEl = dom.preview.querySelector('svg');
   if (!svgEl) { showToast(STRINGS[state.currentLang].toastNoDiagram); return; }
@@ -22,6 +31,9 @@ export async function downloadSvg() {
   showToast(STRINGS[state.currentLang].toastDownloadSvg);
 }
 
+/**
+ * 下载 PNG 文件
+ */
 export async function downloadPng() {
   const svgEl = dom.preview.querySelector('svg');
   if (!svgEl) { showToast(STRINGS[state.currentLang].toastNoDiagram); return; }
@@ -29,7 +41,11 @@ export async function downloadPng() {
   showToast(STRINGS[state.currentLang].toastDownloadPng);
 }
 
-// ── URL encoding (pako compression + base64) ────────────────────────
+// ── URL 编码 (pako 压缩 + base64) ────────────────────────
+
+/**
+ * 编码代码字符串
+ */
 export function encodeCode(code) {
   const bytes = new TextEncoder().encode(code);
   const compressed = pako.deflate(bytes);
@@ -38,6 +54,9 @@ export function encodeCode(code) {
   return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
+/**
+ * 解码代码字符串
+ */
 export function decodeCode(encoded) {
   encoded = encoded.replace(/-/g, '+').replace(/_/g, '/');
   while (encoded.length % 4 !== 0) encoded += '=';
@@ -51,6 +70,9 @@ export function decodeCode(encoded) {
   }
 }
 
+/**
+ * 获取 URL 查询参数中的代码
+ */
 export function getQueryCode() {
   try {
     const param = new URLSearchParams(location.search).get('code');
@@ -59,6 +81,9 @@ export function getQueryCode() {
   } catch (e) { return null; }
 }
 
+/**
+ * 获取 URL Hash 中的代码
+ */
 export function getHashCode() {
   try {
     const hash = location.hash.slice(1);
@@ -67,12 +92,18 @@ export function getHashCode() {
   } catch (e) { return null; }
 }
 
+/**
+ * 更新 URL Hash
+ */
 export function updateHash(code) {
   const encoded = encodeCode(code);
   window.history.replaceState(null, '', '#' + encoded);
   try { localStorage.setItem('mermaid-editor-code', code); } catch (e) {}
 }
 
+/**
+ * 复制分享链接
+ */
 export async function copyShareLink() {
   updateHash(getCode());
   await navigator.clipboard.writeText(location.href);
@@ -80,6 +111,9 @@ export async function copyShareLink() {
   btnSuccess(dom.btnShare);
 }
 
+/**
+ * 复制嵌入代码
+ */
 export async function copyEmbedCode() {
   const encoded = encodeCode(getCode());
   const embedUrl = location.origin + location.pathname.replace(/[^/]*$/, '') + 'embed.html#' + encoded;

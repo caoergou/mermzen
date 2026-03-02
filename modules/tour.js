@@ -1,5 +1,7 @@
-import { state, dom, updateEditorStatus } from './core.js';
-import { STRINGS, applyI18n } from './i18n.js';
+import { state } from './store.js';
+import { dom } from './dom.js';
+import { updateEditorStatus, applyI18n } from './utils.js';
+import { STRINGS } from './i18n.js';
 
 const TOUR_TARGETS = [
   { target: '.panel--editor',      placement: 'right'  },
@@ -8,8 +10,6 @@ const TOUR_TARGETS = [
   { target: '.menubar',            placement: 'bottom' },
   { target: '.btn-cmdk',           placement: 'bottom' },
 ];
-
-let tourStep = 0;
 
 function setCurtains(rect, pad) {
   const vw = window.innerWidth, vh = window.innerHeight;
@@ -43,8 +43,8 @@ function showLangPicker() {
   dom.tourBodyEl.innerHTML =
     '<div style="margin-bottom:12px;opacity:0.85;font-size:13px;line-height:1.6">' + STRINGS[state.currentLang].tourLangBody + '</div>' +
     '<div style="display:flex;gap:8px;justify-content:center">' +
-      '<button class="tour-btn primary lang-pick" data-lang="zh" style="font-size:13px;padding:7px 20px">中文</button>' +
-      '<button class="tour-btn primary lang-pick" data-lang="en" style="font-size:13px;padding:7px 20px">English</button>' +
+    '<button class="tour-btn primary lang-pick" data-lang="zh" style="font-size:13px;padding:7px 20px">中文</button>' +
+    '<button class="tour-btn primary lang-pick" data-lang="en" style="font-size:13px;padding:7px 20px">English</button>' +
     '</div>';
 
   dom.tourTooltip.querySelectorAll('.lang-pick').forEach(btn => {
@@ -53,9 +53,9 @@ function showLangPicker() {
       localStorage.setItem('mermaid-editor-lang', state.currentLang);
       applyI18n();
       updateEditorStatus();
-      tourStep = 0;
+      state.tourStep = 0;
       dom.tourHighlight.style.display = '';
-      showTourStep(tourStep);
+      showTourStep(state.tourStep);
     });
   });
 
@@ -133,20 +133,22 @@ function showTourStep(idx) {
 }
 
 export function startTour() {
-  tourStep = 0;
+  state.tourActive = true;
+  state.tourStep = 0;
   dom.tourOverlay.style.display = 'block';
   showLangPicker();
 }
 
 export function closeTour() {
+  state.tourActive = false;
   dom.tourOverlay.style.display = 'none';
   localStorage.setItem('mermaid-editor-tour-seen', '1');
 }
 
 function nextTourStep() {
-  if (tourStep < TOUR_TARGETS.length - 1) {
-    tourStep++;
-    showTourStep(tourStep);
+  if (state.tourStep < TOUR_TARGETS.length - 1) {
+    state.tourStep++;
+    showTourStep(state.tourStep);
   } else {
     closeTour();
   }

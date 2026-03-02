@@ -1,12 +1,14 @@
-import {
-  state, dom, showToast, closeAllMenus, resetView,
-  applyUiTheme, switchTheme, switchPreviewBg, openHelp, saveHandDrawnPrefs, HAND_FONTS,
-} from './core.js';
+import { state, HAND_FONTS, saveHandDrawnPrefs } from './store.js';
+import { dom } from './dom.js';
+import { showToast, openHelp } from './utils.js';
 import { STRINGS } from './i18n.js';
 import { EXAMPLES_ZH, EXAMPLES_EN } from './examples.js';
 import { initMermaid, renderDiagram } from './render.js';
 import { downloadPng, downloadSvg, copyPng, copyShareLink, copyEmbedCode } from './export.js';
 import { formatCode } from './editor.js';
+import { closeAllMenus } from './ui/menu.js';
+import { resetView } from './ui/zoom.js';
+import { applyUiTheme, switchTheme, switchPreviewBg } from './ui/theme.js';
 
 const cmdOverlay = document.getElementById('cmd-palette-overlay');
 const cmdInput   = document.getElementById('cmd-palette-input');

@@ -1,4 +1,5 @@
-import { state, dom, updateEditorStatus } from './core.js';
+import { state } from './store.js';
+import { updateEditorStatus as updateEditorStatusUtil } from './utils.js';
 
 export const STRINGS = {
   zh: {
@@ -120,7 +121,7 @@ export function applyI18n() {
   const tds = document.querySelectorAll('.help-table td:first-child');
   const keys = ['shortcutSave', 'shortcutCopyPng', 'shortcutFormat', 'shortcutCmdPalette'];
   tds.forEach((td, i) => { if (keys[i]) td.textContent = s[keys[i]]; });
-  updateEditorStatus();
+  updateEditorStatusUtil();
   if (typeof window.renderExampleDropdown === 'function') {
     window.renderExampleDropdown();
   }
