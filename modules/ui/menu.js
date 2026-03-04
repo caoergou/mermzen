@@ -1,5 +1,5 @@
-import { dom, state } from '../store.js';
-import { dom as domEls } from '../dom.js';
+import { state } from '../store.js';
+import { dom } from '../dom.js';
 import { EXAMPLES_ZH, EXAMPLES_EN } from '../examples.js';
 import { copyPng, downloadSvg, downloadPng, copyShareLink, copyEmbedCode } from '../export.js';
 import { showToast, btnSuccess } from '../utils.js';
@@ -20,7 +20,7 @@ import { startTour } from '../tour.js';
  * 关闭所有打开的菜单
  */
 export function closeAllMenus() {
-  domEls.menubar.querySelectorAll('.menubar__item.open').forEach(m => { m.classList.remove('open'); });
+  dom.menubar.querySelectorAll('.menubar__item.open').forEach(m => { m.classList.remove('open'); });
   state.menubarOpen = false;
 }
 
@@ -100,7 +100,7 @@ export function initMenu() {
   document.addEventListener('click', () => { if (exDropdown) exDropdown.classList.remove('open'); });
 
   // 菜单栏交互
-  domEls.menubar.querySelectorAll('.menubar__trigger').forEach(trigger => {
+  dom.menubar.querySelectorAll('.menubar__trigger').forEach(trigger => {
     trigger.addEventListener('click', e => {
       e.stopPropagation();
       const item = trigger.parentElement;
@@ -109,25 +109,25 @@ export function initMenu() {
     });
   });
 
-  domEls.menubar.querySelectorAll('.menubar__item').forEach(item => {
+  dom.menubar.querySelectorAll('.menubar__item').forEach(item => {
     item.addEventListener('mouseenter', () => {
       if (state.menubarOpen && !item.classList.contains('open')) openMenu(item);
     });
   });
 
-  domEls.menubar.querySelectorAll('.menubar__dropdown').forEach(dd => {
+  dom.menubar.querySelectorAll('.menubar__dropdown').forEach(dd => {
     dd.addEventListener('click', e => { e.stopPropagation(); });
   });
 
   document.addEventListener('click', () => { closeAllMenus(); });
 
   // 菜单动作绑定
-  domEls.btnCopyPng.addEventListener('click', () => {
+  dom.btnCopyPng.addEventListener('click', () => {
     closeAllMenus();
     copyPng().catch(e => { showToast('复制失败 · ' + e.message); });
   });
-  domEls.btnDownloadSvg.addEventListener('click', () => { closeAllMenus(); downloadSvg(); });
-  domEls.btnDownloadPng.addEventListener('click', () => {
+  dom.btnDownloadSvg.addEventListener('click', () => { closeAllMenus(); downloadSvg(); });
+  dom.btnDownloadPng.addEventListener('click', () => {
     closeAllMenus();
     downloadPng().catch(e => { showToast('下载失败 · ' + e.message); });
   });
@@ -141,7 +141,7 @@ export function initMenu() {
   const menuRestartTour = document.getElementById('btn-restart-tour-menu');
   if (menuRestartTour) menuRestartTour.addEventListener('click', () => { closeAllMenus(); startTour(); });
 
-  domEls.menubar.querySelectorAll('[data-theme-pick]').forEach(btn => {
+  dom.menubar.querySelectorAll('[data-theme-pick]').forEach(btn => {
     btn.addEventListener('click', () => {
       switchTheme(btn.getAttribute('data-theme-pick'));
       initMermaid();
@@ -151,12 +151,12 @@ export function initMenu() {
   });
 
   // 分享和嵌入
-  domEls.btnShare.addEventListener('click', () => {
+  dom.btnShare.addEventListener('click', () => {
     closeAllMenus();
     copyShareLink().catch(e => { showToast(STRINGS[state.currentLang].toastFailed + ': ' + e.message); });
   });
 
-  domEls.btnEmbedCode.addEventListener('click', () => {
+  dom.btnEmbedCode.addEventListener('click', () => {
     closeAllMenus();
     copyEmbedCode().catch(e => { showToast(STRINGS[state.currentLang].toastFailed + ': ' + e.message); });
   });
