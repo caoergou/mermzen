@@ -259,3 +259,7 @@ graph TD
 After flowcharts, learn [Mermaid Sequence Diagrams](sequence.html) to visualize interactions between systems over time.
 
 </div>
+
+---
+
+如果您想在 MermZen 中尝试上述代码，可以点击 [在线编辑器](https://caoergou.github.io/mermzen/)，然后将代码粘贴进去。

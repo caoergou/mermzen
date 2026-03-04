@@ -341,3 +341,7 @@ sequenceDiagram
 After sequence diagrams, learn [Mermaid Gantt Charts](gantt.html) to visualize project timelines and task dependencies.
 
 </div>
+
+---
+
+如果您想在 MermZen 中尝试上述代码，可以点击 [在线编辑器](https://caoergou.github.io/mermzen/)，然后将代码粘贴进去。

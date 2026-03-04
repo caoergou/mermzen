@@ -80,3 +80,7 @@ classDiagram
     Order "1" *-- "1..*" OrderItem
     OrderItem "*" --> "1" Product
 ```
+
+---
+
+To try the above code in MermZen, click [Open Editor](https://caoergou.github.io/mermzen/) and paste the code there.

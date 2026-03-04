@@ -59,3 +59,7 @@ pie title 网站月度流量来源
 ## 下一步
 
 你已经掌握了 Mermaid 最常用的五种图表！回到 [教程首页](index.html) 回顾所有内容，或直接打开 [MermZen 编辑器](../index.html) 开始绘图。
+
+---
+
+如果您想在 MermZen 中尝试上述代码，可以点击 [在线编辑器](https://caoergou.github.io/mermzen/)，然后将代码粘贴进去。

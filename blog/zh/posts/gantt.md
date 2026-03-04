@@ -310,3 +310,7 @@ gantt
 After Gantt charts, learn [Mermaid Class Diagrams](class.html) to describe object-oriented system structures.
 
 </div>
+
+---
+
+如果您想在 MermZen 中尝试上述代码，可以点击 [在线编辑器](https://caoergou.github.io/mermzen/)，然后将代码粘贴进去。

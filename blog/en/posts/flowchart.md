@@ -97,3 +97,7 @@ graph TD
     I --> J[Redirect to dashboard]
     J --> K([End])
 ```
+
+---
+
+To try the above code in MermZen, click [Open Editor](https://caoergou.github.io/mermzen/) and paste the code there.

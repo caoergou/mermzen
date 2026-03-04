@@ -83,3 +83,7 @@ sequenceDiagram
         Browser-->>User: Show error message
     end
 ```
+
+---
+
+To try the above code in MermZen, click [Open Editor](https://caoergou.github.io/mermzen/) and paste the code there.

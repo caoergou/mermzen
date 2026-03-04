@@ -71,3 +71,7 @@ gantt
     QA testing      : crit,   test,   after ci,   3d
     Launch          : milestone,      after test, 0d
 ```
+
+---
+
+To try the above code in MermZen, click [Open Editor](https://caoergou.github.io/mermzen/) and paste the code there.

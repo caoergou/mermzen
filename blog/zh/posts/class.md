@@ -121,3 +121,7 @@ classDiagram
 ## 下一步
 
 了解类图后，继续学习 [Mermaid 饼图](pie.html)，用三行代码生成数据占比可视化。
+
+---
+
+如果您想在 MermZen 中尝试上述代码，可以点击 [在线编辑器](https://caoergou.github.io/mermzen/)，然后将代码粘贴进去。

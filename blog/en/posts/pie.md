@@ -48,3 +48,7 @@ pie title Development Time Distribution
     "Testing" : 15
     "Documentation" : 10
 ```
+
+---
+
+To try the above code in MermZen, click [Open Editor](https://caoergou.github.io/mermzen/) and paste the code there.
