@@ -69,12 +69,12 @@ export function downloadFile(blob, filename) {
  * 打开帮助模态框
  */
 export function openHelp() {
-  dom.helpModal.classList.add('open');
+  if (dom.helpModal) dom.helpModal.classList.add('open');
 }
 
 /**
  * 关闭帮助模态框
  */
 export function closeHelp() {
-  dom.helpModal.classList.remove('open');
+  if (dom.helpModal) dom.helpModal.classList.remove('open');
 }
