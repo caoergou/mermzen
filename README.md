@@ -18,6 +18,22 @@ The name blends **Mermaid** (the diagram syntax) and **Zen** (simplicity). Desig
 
 ---
 
+## Preview
+
+The diagrams below were exported directly from MermZen in hand-drawn style. The exported SVG can be pasted straight into any HTML page — or embed a live, interactive diagram via `<iframe>`:
+
+<p align="center">
+  <img src="assets/preview-flowchart.svg" alt="Flowchart — user login flow (hand-drawn)" width="46%" />
+  &nbsp;
+  <img src="assets/preview-class.svg" alt="Class diagram — e-commerce order model (hand-drawn)" width="46%" />
+</p>
+
+<p align="center">
+  <img src="assets/preview-sequence.svg" alt="Sequence diagram — HTTP login API chain (hand-drawn)" width="94%" />
+</p>
+
+---
+
 ## Why MermZen
 
 Mermaid's official live editor handles quick sketches, but falls short when you need a real editing environment — proper syntax feedback, keyboard-driven workflow, theme control, or a way to share diagrams without hosting anything.
@@ -46,6 +62,7 @@ The entire application is plain HTML + CSS + JS, served as static files. No buil
 - Export SVG or PNG (PNG rendered at 2× resolution)
 - Copy PNG directly to clipboard
 - Shareable URL — diagram state encoded in the URL hash, no server needed
+- Embeddable iframe via `embed.html` — paste `<iframe src="…/embed.html#code">` into any page for a live, hand-drawn diagram with zero dependencies
 
 **Appearance**
 - Hand-drawn style mode (with Chinese handwriting font support)

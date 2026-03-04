@@ -24,34 +24,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install pandoc
-        run: sudo apt-get install -y pandoc
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-      - name: Build Chinese blog posts
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Start local HTTP server
         run: |
-          for f in blog/zh/posts/*.md; do
-            [ -f "$f" ] || continue
-            slug=$(basename "$f" .md)
-            pandoc "$f" \
-              --template blog/_template-zh.html \
-              -f markdown+yaml_metadata_block \
-              --metadata slug="$slug" \
-              -o "blog/zh/${slug}.html"
-            echo "Generated: blog/zh/${slug}.html"
+          python3 -m http.server 8766 &
+          for i in $(seq 1 15); do
+            curl -s http://localhost:8766/ > /dev/null && echo "Server ready on :8766" && break
+            sleep 1
           done
 
-      - name: Build English blog posts
-        run: |
-          for f in blog/en/posts/*.md; do
-            [ -f "$f" ] || continue
-            slug=$(basename "$f" .md)
-            pandoc "$f" \
-              --template blog/_template-en.html \
-              -f markdown+yaml_metadata_block \
-              --metadata slug="$slug" \
-              -o "blog/en/${slug}.html"
-            echo "Generated: blog/en/${slug}.html"
-          done
+      - name: Generate preview SVGs
+        run: node scripts/generate-preview-svgs.js
+
+      - name: Build blog posts (zh + en)
+        run: node scripts/build-blog.js
 
       - name: Generate sitemap and robots.txt
         run: |

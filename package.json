@@ -1,0 +1,27 @@
+{
+  "name": "mermaid-pic",
+  "version": "1.0.0",
+  "description": "[![Deploy to GitHub Pages](https://github.com/caoergou/mermaid-pic/actions/workflows/deploy.yml/badge.svg)](https://github.com/caoergou/mermaid-pic/actions/workflows/deploy.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/caoergou/mermaid-pic)](https://github.com/caoergou/mermaid-pic/stargazers)",
+  "main": "app.js",
+  "scripts": {
+    "build:blog": "node scripts/build-blog.js",
+    "build:svgs": "node scripts/generate-preview-svgs.js",
+    "build": "npm run build:blog",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caoergou/mermaid-pic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caoergou/mermaid-pic/issues"
+  },
+  "homepage": "https://github.com/caoergou/mermaid-pic#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "marked": "^17.0.3"
+  }
+}
