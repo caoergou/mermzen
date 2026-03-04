@@ -16,7 +16,6 @@ export const dom = {
   btnDownloadPng: document.getElementById('btn-download-png'),
   btnShare: document.getElementById('btn-share'),
   btnEmbedCode: document.getElementById('btn-embed-code'),
-  btnCopyAiPrompt: document.getElementById('btn-copy-ai-prompt'),
   menubar: document.getElementById('menubar'),
   btnHelp: document.getElementById('btn-help'),
   divider: document.getElementById('divider'),

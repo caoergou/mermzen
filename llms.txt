@@ -2,32 +2,32 @@
 
 Online Mermaid diagram editor with live preview and SVG/PNG export. No backend, no login required.
 
-## How to use from AI
+URL: https://caoergou.github.io/mermaid-pic/
 
-To open a diagram in the editor, base64-encode the Mermaid code and append it as a `?code=` query parameter:
+## Opening a diagram via URL
+
+Base64-encode the Mermaid code and pass it as a `?code=` query parameter:
 
 ```
-https://eric.run.place/?code={base64(mermaid_code)}
+https://caoergou.github.io/mermaid-pic/?code={base64(mermaid_code)}
 ```
 
-### Example (JavaScript)
+### Encoding examples
 
+JavaScript:
 ```js
-const code = `graph TD\n  A[Start] --> B{Decision}\n  B -->|Yes| C[OK]\n  B -->|No| D[Fail]`;
-const url = `https://eric.run.place/?code=${btoa(unescape(encodeURIComponent(code)))}`;
+const url = `https://caoergou.github.io/mermaid-pic/?code=${btoa(unescape(encodeURIComponent(code)))}`;
 ```
 
-### Example (Python)
-
+Python:
 ```python
 import base64
-code = "graph TD\n  A[Start] --> B{Decision}"
-url = "https://eric.run.place/?code=" + base64.b64encode(code.encode()).decode()
+url = "https://caoergou.github.io/mermaid-pic/?code=" + base64.b64encode(code.encode()).decode()
 ```
 
 ## Supported diagram types
 
-graph, flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timeline, xychart-beta, gitGraph
+flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, architecture-beta, gitGraph, block-beta
 
 ## Features
 

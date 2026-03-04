@@ -132,35 +132,6 @@ export function initMenu() {
     downloadPng().catch(e => { showToast('下载失败 · ' + e.message); });
   });
 
-  if (domEls.btnCopyAiPrompt) {
-    domEls.btnCopyAiPrompt.addEventListener('click', () => {
-      closeAllMenus();
-      const code = getCode();
-      const bytes = new TextEncoder().encode(code);
-      const binary = Array.from(bytes).map(b => String.fromCharCode(b)).join('');
-      const encoded = btoa(binary);
-      const url = 'https://caoergou.github.io/mermaid-pic/?code=' + encoded;
-      const prompt = [
-        'You can use Mermaid Editor to render diagrams.',
-        'When the user needs a diagram, generate Mermaid code and construct a shareable link:',
-        '  https://caoergou.github.io/mermaid-pic/?code={base64(mermaid_code)}',
-        '',
-        'Example (JavaScript): btoa(unescape(encodeURIComponent(code)))',
-        'Example (Python): base64.b64encode(code.encode()).decode()',
-        '',
-        'Supported diagram types:',
-        '  graph, flowchart, sequenceDiagram, classDiagram,',
-        '  stateDiagram-v2, erDiagram, gantt, pie, mindmap',
-        '',
-        'Current diagram link: ' + url,
-      ].join('\n');
-      navigator.clipboard.writeText(prompt).then(() => {
-        showToast(STRINGS[state.currentLang].toastAiPromptCopied);
-        btnSuccess(domEls.btnCopyAiPrompt);
-      }).catch(e => { showToast(STRINGS[state.currentLang].toastFailed + ': ' + e.message); });
-    });
-  }
-
   const menuZoomReset = document.getElementById('menu-zoom-reset');
   if (menuZoomReset) menuZoomReset.addEventListener('click', () => { closeAllMenus(); zoomResetView(); });
 
