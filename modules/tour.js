@@ -1,7 +1,7 @@
 import { state } from './store.js';
 import { dom } from './dom.js';
-import { updateEditorStatus, applyI18n } from './utils.js';
-import { STRINGS } from './i18n.js';
+import { updateEditorStatus } from './utils.js';
+import { STRINGS, applyI18n } from './i18n.js';
 
 const TOUR_TARGETS = [
   { target: '.panel--editor',      placement: 'right'  },
