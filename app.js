@@ -13,6 +13,7 @@ import { initLayout } from './modules/ui/layout.js';
 import { initZoom } from './modules/ui/zoom.js';
 import { initMobileUI, switchMobileTab } from './modules/ui/mobile.js';
 import { STRINGS } from './modules/i18n.js';
+import { dom } from './modules/dom.js';
 
 // ── 初始化 UI 主题 ───────────────────────────────────────────────────
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
@@ -129,7 +130,31 @@ function bootstrap() {
 
   if (window.innerWidth <= 768) switchMobileTab('editor');
   if (!localStorage.getItem('mermzen-tour-seen')) {
-    setTimeout(startTour, 500);
+    if (window.innerWidth <= 768) {
+      // 移动端只显示语言选择
+      setTimeout(() => {
+        state.tourActive = true;
+        dom.tourOverlay.style.display = 'block';
+        dom.tourCurtainTop.style.cssText = 'top:0;left:0;right:0;bottom:0';
+        dom.tourHighlight.style.cssText = 'display:none';
+        dom.tourTitleEl.textContent = STRINGS[state.currentLang].tourLangTitle;
+        dom.tourBodyEl.innerHTML = '<div class="tour-lang-picker"><button data-tour-lang="zh">中文</button><button data-tour-lang="en">English</button></div>';
+        dom.tourSkip.style.display = 'none';
+        dom.tourNext.style.display = 'none';
+        document.querySelectorAll('[data-tour-lang]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            state.currentLang = btn.getAttribute('data-tour-lang');
+            localStorage.setItem('mermzen-lang', state.currentLang);
+            applyI18n();
+            state.tourActive = false;
+            dom.tourOverlay.style.display = 'none';
+            localStorage.setItem('mermzen-tour-seen', '1');
+          });
+        });
+      }, 500);
+    } else {
+      setTimeout(startTour, 500);
+    }
   }
 }
 

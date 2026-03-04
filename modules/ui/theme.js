@@ -61,12 +61,11 @@ export function syncHandDrawnUI() {
  */
 export function switchTheme(t) {
   state.currentTheme = t;
-  document.querySelectorAll('.theme-pill').forEach(p => {
-    p.classList.remove('active');
-    p.setAttribute('aria-checked', 'false');
+  const label = document.getElementById('theme-dropdown-label');
+  if (label) label.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+  document.querySelectorAll('.theme-dropdown__panel button').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-theme') === t);
   });
-  const pill = document.querySelector('.theme-pill[data-theme="' + t + '"]');
-  if (pill) { pill.classList.add('active'); pill.setAttribute('aria-checked', 'true'); }
   if (dom.themeSelect) dom.themeSelect.value = t;
   dom.menubar.querySelectorAll('[data-theme-pick]').forEach(b => {
     b.classList.toggle('active', b.getAttribute('data-theme-pick') === t);
@@ -81,10 +80,12 @@ export function switchPreviewBg(value) {
   state.previewBg = value;
   dom.previewViewport.classList.remove('bg-white', 'bg-black', 'bg-checker', 'bg-grid');
   dom.previewViewport.classList.add('bg-' + value);
-  document.querySelectorAll('.bg-pill').forEach(b => {
-    const v = b.getAttribute('data-bg');
-    b.classList.toggle('active', v === value);
-    b.setAttribute('aria-checked', v === value ? 'true' : 'false');
+  const swatch = document.getElementById('bg-dropdown-swatch');
+  if (swatch) {
+    swatch.className = 'bg-pill__swatch bg-pill__swatch--' + value;
+  }
+  document.querySelectorAll('.bg-dropdown__panel button').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-bg') === value);
   });
   dom.menubar.querySelectorAll('[data-bg-menu]').forEach(b => {
     b.classList.toggle('active', b.getAttribute('data-bg-menu') === value);
@@ -111,31 +112,53 @@ export function openHelp() {
 }
 
 /**
- * 绑定预览区上方的 Mermaid 主题丸与背景色丸、以及工具栏快捷切换按钮
+ * 绑定预览区上方的 Mermaid 主题与背景色下拉框、以及工具栏快捷切换按钮
  */
 export function initPreviewPills() {
   switchPreviewBg(state.previewBg);
 
-  document.querySelectorAll('.theme-pill').forEach(p => {
-    p.addEventListener('click', () => {
-      const t = p.getAttribute('data-theme');
-      if (t) {
-        switchTheme(t);
-        initMermaid();
-        renderDiagram();
-        updateHash(getCode());
-      }
+  // 主题下拉框
+  const themeDropdown = document.getElementById('theme-dropdown');
+  const themeTrigger = document.getElementById('theme-dropdown-trigger');
+  const themePanel = document.getElementById('theme-dropdown-panel');
+  if (themeTrigger && themePanel) {
+    themeTrigger.addEventListener('click', () => themeDropdown.classList.toggle('open'));
+    themePanel.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const t = btn.getAttribute('data-theme');
+        if (t) {
+          switchTheme(t);
+          initMermaid();
+          renderDiagram();
+          updateHash(getCode());
+          themeDropdown.classList.remove('open');
+        }
+      });
     });
-  });
+  }
 
-  document.querySelectorAll('.bg-pill').forEach(b => {
-    b.addEventListener('click', () => {
-      const v = b.getAttribute('data-bg');
-      if (v) {
-        switchPreviewBg(v);
-        updateHash(getCode());
-      }
+  // 背景下拉框
+  const bgDropdown = document.getElementById('bg-dropdown');
+  const bgTrigger = document.getElementById('bg-dropdown-trigger');
+  const bgPanel = document.getElementById('bg-dropdown-panel');
+  if (bgTrigger && bgPanel) {
+    bgTrigger.addEventListener('click', () => bgDropdown.classList.toggle('open'));
+    bgPanel.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.getAttribute('data-bg');
+        if (v) {
+          switchPreviewBg(v);
+          updateHash(getCode());
+          bgDropdown.classList.remove('open');
+        }
+      });
     });
+  }
+
+  // 点击外部关闭下拉框
+  document.addEventListener('click', e => {
+    if (themeDropdown && !themeDropdown.contains(e.target)) themeDropdown.classList.remove('open');
+    if (bgDropdown && !bgDropdown.contains(e.target)) bgDropdown.classList.remove('open');
   });
 
   if (dom.handDrawnToggleQuick) {

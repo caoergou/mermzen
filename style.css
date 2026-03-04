@@ -702,24 +702,48 @@ kbd {
 .tour-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.3); transition: background 0.2s; }
 .tour-dot.active { background: #fff; width: 14px; border-radius: 3px; }
 
-/* ── Theme pills (VS Code–style segmented control) ───────────────── */
-.theme-pills {
-  display: flex; gap: 0; align-items: center;
-  background: transparent; border: none; padding: 0; margin-right: 8px;
+/* ── Theme & Background Dropdowns ──────────────────────────────── */
+.theme-dropdown, .bg-dropdown {
+  position: relative; flex-shrink: 0; margin-right: 4px;
 }
-.theme-pill {
-  padding: 2px 8px; font-size: 10px; border-radius: 0; border: none;
-  background: transparent; color: var(--text-secondary);
-  cursor: pointer; transition: color 0.1s; white-space: nowrap;
-  text-transform: uppercase; letter-spacing: 0.3px; font-weight: 500;
+.theme-dropdown__trigger, .bg-dropdown__trigger {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 6px 2px 5px; font-size: 11px; height: 22px;
+  background: transparent; border: 1px solid transparent;
+  color: var(--text-secondary); border-radius: 3px;
+  cursor: pointer; transition: background 0.1s, border-color 0.1s, color 0.1s;
+  white-space: nowrap; font-family: inherit;
 }
-.theme-pill:hover { color: var(--text-primary); }
-.theme-pill.active {
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--accent);
-  background: transparent;
+.theme-dropdown__trigger:hover, .theme-dropdown.open .theme-dropdown__trigger,
+.bg-dropdown__trigger:hover, .bg-dropdown.open .bg-dropdown__trigger {
+  background: var(--btn-hover); border-color: var(--border-color); color: var(--text-primary);
 }
-.theme-pill.active:hover { opacity: 1; }
+.theme-dropdown__trigger svg, .bg-dropdown__trigger svg { flex-shrink: 0; opacity: 0.6; }
+.theme-dropdown__trigger:hover svg, .bg-dropdown__trigger:hover svg { opacity: 1; }
+.theme-dropdown__panel, .bg-dropdown__panel {
+  display: none; position: fixed;
+  background: var(--modal-bg); border: 1px solid var(--border-color);
+  border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  min-width: 140px; z-index: 1000; padding: 4px 0;
+  flex-direction: column;
+}
+.theme-dropdown.open .theme-dropdown__panel, .bg-dropdown.open .bg-dropdown__panel { display: flex; }
+.theme-dropdown__panel button, .bg-dropdown__panel button {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; border: none; background: transparent;
+  padding: 6px 12px; font-size: 12px;
+  color: var(--text-primary); cursor: pointer;
+  text-align: left; white-space: nowrap;
+  transition: background 0.05s; font-family: inherit;
+}
+.theme-dropdown__panel button:hover, .bg-dropdown__panel button:hover {
+  background: var(--accent); color: #fff;
+}
+.theme-dropdown__panel button.active, .bg-dropdown__panel button.active { background: var(--btn-hover); }
+.theme-dropdown__panel button svg, .bg-dropdown__panel button svg {
+  flex-shrink: 0; width: 13px; height: 13px; opacity: 0.7;
+}
+.bg-dropdown__trigger .bg-pill__swatch { margin-right: 2px; }
 
 /* ── Example dropdown (editor tab bar) ────────────────────────────── */
 .example-dropdown {
