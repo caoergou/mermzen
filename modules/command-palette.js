@@ -173,6 +173,13 @@ export function closeCmdPalette() {
 }
 
 // ── Command palette event bindings ──────────────────────────────────
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    if (cmdOverlay.classList.contains('open')) closeCmdPalette();
+    else openCmdPalette();
+  }
+});
 cmdOverlay.addEventListener('click', e => { if (e.target === cmdOverlay) closeCmdPalette(); });
 cmdInput.addEventListener('input', () => { filterCmdCommands(cmdInput.value.trim()); });
 cmdInput.addEventListener('keydown', e => {
