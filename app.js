@@ -64,7 +64,7 @@ document.addEventListener('keydown', e => {
   const mod = e.ctrlKey || e.metaKey;
   if (mod && e.key === 's') {
     e.preventDefault();
-    if (!isInput) openSaveDialog();
+    openSaveDialog();
     return;
   }
   if (mod && e.shiftKey && e.key === 'C') {
