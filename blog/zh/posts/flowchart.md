@@ -1,4 +1,9 @@
-
+---
+title: 如何用 Mermaid 画流程图
+description: 深入讲解 Mermaid 流程图的节点形状、连线类型、子图分组、条件判断语法，附用户登录流程的完整实战示例。
+date: 2026-03-04
+slug: flowchart
+---
 
 # 如何用 Mermaid 画流程图
 
@@ -13,7 +18,7 @@
 ```
 graph TD
 ```
-<a href="https://caoergou.github.io/mermzen/#Sy9KLMhQCHEBAA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
+<a href="https://eric.run.place/mermzen/#Sy9KLMhQCHEBAA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
 
 | 方向参数 | 含义 | 效果 |
 |---------|------|------|
@@ -37,7 +42,7 @@ graph TD
     G[(数据库)]
     H>标注旗帜]
 ```
-<a href="https://caoergou.github.io/mermzen/#Sy9KLMhQCHHhUgACx-hn03Y-W9gWC-Y5aTyd0_Zi-SSImCZYzLn6Rf_Gp3sX1YJ5LhogJUCuJkTWVSP62ZK1QKFYCN8tOvrp2gnPV3Q_3dUPMhZirnu0xrOpG571rnu6a7ImRMjD7tmC9mebVzybPv3pjjmxAA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
+<a href="https://eric.run.place/mermzen/#Sy9KLMhQCHHhUgACx-hn03Y-W9gWC-Y5aTyd0_Zi-SSImCZYzLn6Rf_Gp3sX1YJ5LhogJUCuJkTWVSP62ZK1QKFYCN8tOvrp2gnPV3Q_3dUPMhZirnu0xrOpG571rnu6a7ImRMjD7tmC9mebVzybPv3pjjmxAA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
 
 | 语法 | 形状 | 典型用途 |
 |------|------|---------|
@@ -62,7 +67,7 @@ graph LR
     A --文字--> F
     A -->|标签| G
 ```
-<a href="https://caoergou.github.io/mermzen/#Sy9KLMhQ8AniUgACRwVdXTsFJzhbV8EZxtYDSrhAOba2dgqucEXPprU_XTsdpNENYUjNswXtz9fuq1FwBwA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
+<a href="https://eric.run.place/mermzen/#Sy9KLMhQ8AniUgACRwVdXTsFJzhbV8EZxtYDSrhAOba2dgqucEXPprU_XTsdpNENYUjNswXtz9fuq1FwBwA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
 
 | 语法 | 含义 |
 |------|------|
@@ -89,7 +94,7 @@ graph TD
     end
     B --> C
 ```
-<a href="https://caoergou.github.io/mermzen/#Sy9KLMhQCHHhUgCC4tKkdDD_aWfv89XrwWIg4Bj9fMqKZx3bn0_teTl3UayCrq6dglP0i4UrnvZOfbmq58X6xliw2tS8FDRzJvQhm-Mc7RjgqfB878SnrZshprhEP5u64Vnvuqe7JqMa4QSWdgYA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
+<a href="https://eric.run.place/mermzen/#Sy9KLMhQCHHhUgCC4tKkdDD_aWfv89XrwWIg4Bj9fMqKZx3bn0_teTl3UayCrq6dglP0i4UrnvZOfbmq58X6xliw2tS8FDRzJvQhm-Mc7RjgqfB878SnrZshprhEP5u64Vnvuqe7JqMa4QSWdgYA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
 
 ## 完整示例：用户登录流程
 
@@ -108,7 +113,7 @@ graph TD
     I --> J[跳转首页]
     J --> K([结束])
 ```
-<a href="https://caoergou.github.io/mermzen/#Sy9KLMhQCHHhUgACR43op3sani7vjtVU0NW1U3CKfj5lxbOO7S_2TX7auvTFlmVP-7cr6Cs8Xd_2fEFjLFiLE1ihczVE8tmM9U8nLHu6dsbTOSvsa8EKnEEKaoCiNQou0c_6Jzxfsgui9smOXohCiEEuEBuR9AANq1FwrYbYBjH52drFzxeug5rsijDZLfrFug1P9059umTjiy1Ln61Z-GzqBoixbmBj3auRZRQedS5VMIaa4o6wyyP65ZTGp-tmQT1qbKDwtKPt5aT5sUgKwdY5IdkP1ukJDKj5zzomKASnFhdn5ucphORnp-ZB9HmCXeAV_WL75hd717xcNu3lwq0QGS-wjLdG9PPdk5_NnR-rCQA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
+<a href="https://eric.run.place/mermzen/#Sy9KLMhQCHHhUgACR43op3sani7vjtVU0NW1U3CKfj5lxbOO7S_2TX7auvTFlmVP-7cr6Cs8Xd_2fEFjLFiLE1ihczVE8tmM9U8nLHu6dsbTOSvsa8EKnEEKaoCiNQou0c_6Jzxfsgui9smOXohCiEEuEBuR9AANq1FwrYbYBjH52drFzxeug5rsijDZLfrFug1P9059umTjiy1Ln61Z-GzqBoixbmBj3auRZRQedS5VMIaa4o6wyyP65ZTGp-tmQT1qbKDwtKPt5aT5sUgKwdY5IdkP1ukJDKj5zzomKASnFhdn5ucphORnp-ZB9HmCXeAV_WL75hd717xcNu3lwq0QGS-wjLdG9PPdk5_NnR-rCQA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
 
 ## 速查表
 
@@ -129,140 +134,6 @@ graph TD
 
 掌握流程图后，继续学习 [Mermaid 时序图](sequence.html)，用于描述系统之间的交互顺序。
 
-
-
-
-
-# Mermaid Flowchart Tutorial
-
-<span class="post-meta">2026-03-04 · MermZen Tutorials
-
-Flowcharts describe the steps and decision paths of a process — perfect for user journeys, approval workflows, and algorithm logic. Mermaid uses the `graph` or `flowchart` keyword to declare a flowchart in plain text, no drawing tools required.
-
-## Declaring a Chart
-
-Use `graph` or `flowchart` followed by a direction parameter:
-
-```
-graph TD
-```
-<a href="https://caoergou.github.io/mermzen/#Sy9KLMhQCHEBAA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
-
-| Direction | Meaning | Best for |
-|-----------|---------|---------|
-| `TD` / `TB` | Top → Down | Most common; step-by-step flows |
-| `LR` | Left → Right | State machines, pipelines |
-| `BT` | Bottom → Top | Reverse order diagrams |
-| `RL` | Right → Left | Rarely used |
-
-## Node Shapes
-
-Nodes are the building blocks. Different bracket styles create different shapes:
-
-```
-graph TD
-    A[Rectangle]
-    B(Rounded rect)
-    C{Diamond}
-    D((Circle))
-    E([Stadium / pill])
-    F[[Subroutine]]
-    G[(Database)]
-```
-<a href="https://caoergou.github.io/mermzen/#JYwxDsIwDEV3TuHRmTgDNMDeslkZ3MYqltKkSpMJcXeq5G_vPemvmfcPvO0Fzt1olKVwXIO4Ju44phq9eMhnMM0NX6u8peh_DS3ioHkJYnp-IE2FvdYNrrBrCK77J9FU55xq0Siu378ILRee-RDj_g" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
-
-| Syntax | Shape | Typical use |
-|--------|-------|------------|
-| `A[text]` | Rectangle | Steps, actions |
-| `A(text)` | Rounded rectangle | Subprocesses |
-| `A{text}` | Diamond | Conditions, decisions |
-| `A((text))` | Circle | Connectors, junctions |
-| `A([text])` | Stadium | Start / End nodes |
-| `A[[text]]` | Double-border rect | Subroutine calls |
-| `A[(text)]` | Cylinder | Databases, storage |
-
-## Connection Types
-
-Links define how nodes relate visually:
-
-```
-graph LR
-    A --> B
-    A --- C
-    A -.-> D
-    A ==> E
-    A --label--> F
-    A -->|label| G
-```
-<a href="https://caoergou.github.io/mermzen/#Sy9KLMhQ8AniUgACRwVdXTsFJzhbV8EZxtYDSrhAOba2dgqucEU5iUmpOSB9bggzasCCNQruAA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
-
-| Syntax | Meaning |
-|--------|---------|
-| `A --> B` | Solid arrow (most common) |
-| `A --- B` | Solid line, no arrow |
-| `A -.-> B` | Dashed arrow (optional path) |
-| `A ==> B` | Thick arrow (emphasis) |
-| `A --text--> B` | Arrow with inline label |
-| `A -->|label| B` | Arrow with label (alternate) |
-| `A --o B` | Circle endpoint |
-| `A --x B` | Cross endpoint (error/rejection) |
-
-## Subgraphs
-
-Use `subgraph` to group related nodes and add visual hierarchy:
-
-```
-graph TD
-    subgraph Frontend
-        A[UI Layer] --> B[Form Validation]
-    end
-    subgraph Backend
-        C[API Gateway] --> D[Database]
-    end
-    B --> C
-```
-<a href="https://caoergou.github.io/mermzen/#Sy9KLMhQCHHhUgCC4tKkdDDfrSg_ryQ1LwUsCgKO0aGeCj6JlalFsQq6unYKTtFu-UW5CmGJOZkpiSWZ-XmxYKUwLXCDnBKTs5HNcY52DPBUcE8sSS1PrIQY5RLtkliSmJRYnIpqhhNY1hkA" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
-
-## Full Example: User Login Flow
-
-```
-graph TD
-    A([Start]) --> B[User enters credentials]
-    B --> C{Account exists?}
-    C -->|No| D[Show error message]
-    D --> B
-    C -->|Yes| E{Password correct?}
-    E -->|No| F[Increment fail count]
-    F --> G{Fails >= 3?}
-    G -->|Yes| H[Lock account 30 min]
-    G -->|No| B
-    E -->|Yes| I[Generate Session Token]
-    I --> J[Redirect to dashboard]
-    J --> K([End])
-```
-<a href="https://caoergou.github.io/mermzen/#TY9NT8MwDIbv_Aoft8MkpJ0ZWtcPOhBCdBxQ1EOWmDXamiA7aEgt_500raA-RfbzfuRE8rOBQ3oDYbYLUXlJvl7CarWBRLwxEqD1SAyKUIenkReuI51EaNdtlXJf1gN-G_Z8_xOPu-HYP7seUlE17gpI5AhaZJYnHA3SMWXGvyP3kHUvkvnqSINyRKj85Jn9eeaitKFPG_rAhzQXiA1G1zy6Fl0e9gybO1hP8uI_4kE8OXUGOTVf30JrbD2jhpBkFhpVpSjQIkmPUIV_GGfh4M44CcuYuxevqM1QGrwDLbk5Okl6RPYReVyIzOp6-Qs" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
-
-## Quick Reference
-
-| Syntax | Description |
-|--------|-------------|
-| `graph TD` | Top-down layout |
-| `graph LR` | Left-right layout |
-| `A[text]` | Rectangle node |
-| `A{text}` | Diamond (decision) |
-| `A([text])` | Start/End (stadium) |
-| `A --> B` | Solid arrow |
-| `A -->|label| B` | Labeled arrow |
-| `A -.-> B` | Dashed arrow |
-| `subgraph title` | Group nodes |
-| `%% comment` | Line comment |
-
-## Next Up
-
-After flowcharts, learn [Mermaid Sequence Diagrams](sequence.html) to visualize interactions between systems over time.
-
-
-
 ---
 
-如果您想在 MermZen 中尝试上述代码，可以点击 [在线编辑器](https://caoergou.github.io/mermzen/)，然后将代码粘贴进去。
+如果您想在 MermZen 中尝试上述代码，可以点击 [在线编辑器](https://eric.run.place/mermzen/)，然后将代码粘贴进去。

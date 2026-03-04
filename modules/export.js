@@ -98,7 +98,7 @@ export function getHashCode() {
 export function updateHash(code) {
   const encoded = encodeCode(code);
   window.history.replaceState(null, '', '#' + encoded);
-  try { localStorage.setItem('mermaid-editor-code', code); } catch (e) {}
+  try { localStorage.setItem('mermzen-code', code); } catch (e) {}
 }
 
 /**

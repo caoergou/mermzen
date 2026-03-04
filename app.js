@@ -31,7 +31,7 @@ function bootstrap() {
   initMermaid();
   applyI18n();
 
-  const savedCode = (() => { try { return localStorage.getItem('mermaid-editor-code'); } catch (e) { return null; } })();
+  const savedCode = (() => { try { return localStorage.getItem('mermzen-code'); } catch (e) { return null; } })();
   const initialCode = getQueryCode() || getHashCode() || savedCode || DEFAULT_CODE;
 
   createEditor(initialCode, doc => {
@@ -47,7 +47,7 @@ function bootstrap() {
   renderDiagram();
 
   if (window.innerWidth <= 768) switchMobileTab('editor');
-  if (!localStorage.getItem('mermaid-editor-tour-seen')) {
+  if (!localStorage.getItem('mermzen-tour-seen')) {
     setTimeout(startTour, 500);
   }
 }

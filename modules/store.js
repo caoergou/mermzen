@@ -10,7 +10,7 @@ export const HAND_FONTS = {
  */
 function loadHandDrawnPrefs() {
   try {
-    const raw = localStorage.getItem('mermaid-editor-handdrawn');
+    const raw = localStorage.getItem('mermzen-handdrawn');
     if (raw) return JSON.parse(raw);
   } catch (e) { /* 忽略错误 */ }
   return {};
@@ -33,7 +33,7 @@ export const state = {
   menubarOpen: false,
   toastTimeout: null,
   currentLang: (() => {
-    const saved = localStorage.getItem('mermaid-editor-lang');
+    const saved = localStorage.getItem('mermzen-lang');
     if (saved && (saved === 'zh' || saved === 'en')) return saved;
     const browser = (navigator.language || 'en').toLowerCase();
     return browser.startsWith('zh') ? 'zh' : 'en';
@@ -47,7 +47,7 @@ export const state = {
  */
 export function saveHandDrawnPrefs() {
   try {
-    localStorage.setItem('mermaid-editor-handdrawn', JSON.stringify({
+    localStorage.setItem('mermzen-handdrawn', JSON.stringify({
       enabled: state.handDrawn,
       seedMode: state.handDrawnSeedMode,
       font: state.handDrawnFont,

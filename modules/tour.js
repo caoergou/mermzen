@@ -50,7 +50,7 @@ function showLangPicker() {
   dom.tourTooltip.querySelectorAll('.lang-pick').forEach(btn => {
     btn.addEventListener('click', () => {
       state.currentLang = btn.getAttribute('data-lang');
-      localStorage.setItem('mermaid-editor-lang', state.currentLang);
+      localStorage.setItem('mermzen-lang', state.currentLang);
       applyI18n();
       updateEditorStatus();
       state.tourStep = 0;
@@ -142,7 +142,7 @@ export function startTour() {
 export function closeTour() {
   state.tourActive = false;
   dom.tourOverlay.style.display = 'none';
-  localStorage.setItem('mermaid-editor-tour-seen', '1');
+  localStorage.setItem('mermzen-tour-seen', '1');
 }
 
 function nextTourStep() {
