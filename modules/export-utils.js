@@ -218,7 +218,15 @@ export async function inlineFontsIntoSvg(svgEl) {
  * @param {number} scale - 缩放比例
  */
 export function svgToPngBlob(svgEl, scale) {
-  scale = scale || 6;
+  if (!scale) {
+    // 动态计算缩放比例：目标最小边 1200-2400px，最大边不超过 4800px
+    const bbox = svgEl.getBoundingClientRect();
+    const w = bbox.width || 800, h = bbox.height || 600;
+    const minSide = Math.min(w, h), maxSide = Math.max(w, h);
+    const scaleForMin = Math.max(1200 / minSide, 1);
+    const scaleForMax = Math.min(4800 / maxSide, 10);
+    scale = Math.min(scaleForMin, scaleForMax);
+  }
   return new Promise((resolve, reject) => {
     inlineFontsIntoSvg(svgEl).then(cloned => {
       const images = cloned.querySelectorAll('image');
