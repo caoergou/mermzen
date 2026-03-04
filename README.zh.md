@@ -23,13 +23,13 @@
 下面的图表均由 MermZen 直接导出，手绘风格。导出的 SVG 可直接粘贴进任何 HTML 页面使用；也可通过 `<iframe>` 嵌入一个实时交互的动态图表：
 
 <p align="center">
-  <img src="assets/preview-flowchart.svg" alt="流程图 — 用户登录流程（手绘风格）" width="46%" />
+  <img src="assets/preview-flowchart.png" alt="流程图 — 用户登录流程（手绘风格）" width="46%" />
   &nbsp;
-  <img src="assets/preview-class.svg" alt="类图 — 电商订单模型（手绘风格）" width="46%" />
+  <img src="assets/preview-class.png" alt="类图 — 电商订单模型（手绘风格）" width="46%" />
 </p>
 
 <p align="center">
-  <img src="assets/preview-sequence.svg" alt="时序图 — HTTP 登录接口调用链（手绘风格）" width="94%" />
+  <img src="assets/preview-sequence.png" alt="时序图 — HTTP 登录接口调用链（手绘风格）" width="94%" />
 </p>
 
 ---

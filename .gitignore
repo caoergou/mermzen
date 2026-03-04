@@ -19,5 +19,4 @@ blog/en/*.html
 # Development and temporary files
 .dev/
 .playwright-mcp/
-*.png
 test-highlight.html
