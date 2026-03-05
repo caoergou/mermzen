@@ -6,7 +6,7 @@ import { state } from './store';
 /**
  * 转义 HTML 字符串以防止 XSS
  */
-export function escapeHtml(str) {
+export function escapeHtml(str: string): string {
   const div = document.createElement('div');
   div.appendChild(document.createTextNode(str));
   return div.innerHTML;
@@ -15,7 +15,7 @@ export function escapeHtml(str) {
 /**
  * 显示 Toast 提示消息
  */
-export function showToast(message) {
+export function showToast(message: string): void {
   dom.toast.textContent = message;
   dom.toast.classList.add('show');
   clearTimeout(state.toastTimeout);
@@ -25,7 +25,7 @@ export function showToast(message) {
 /**
  * 更新编辑器状态栏（行数和字符数）
  */
-export function updateEditorStatus() {
+export function updateEditorStatus(): void {
   const val = state.editorView ? state.editorView.state.doc.toString() : '';
   const lines = val ? val.split('\n').length : 0;
   dom.editorStatus.textContent = state.currentLang === 'zh'
@@ -38,7 +38,7 @@ export function updateEditorStatus() {
  * @param {string} s - 状态类名 (rendering, ok, error)
  * @param {string} text - 显示的文本
  */
-export function setRenderStatus(s, text) {
+export function setRenderStatus(s: string, text: string): void {
   dom.renderStatus.textContent = text || '';
   dom.renderStatus.className = 'render-status' + (s ? ' visible ' + s : '');
 }
@@ -46,7 +46,7 @@ export function setRenderStatus(s, text) {
 /**
  * 按钮点击成功反馈动画
  */
-export function btnSuccess(btn) {
+export function btnSuccess(btn: HTMLElement): void {
   btn.classList.add('success');
   setTimeout(() => { btn.classList.remove('success'); }, 1200);
 }
@@ -54,7 +54,7 @@ export function btnSuccess(btn) {
 /**
  * 触发文件下载
  */
-export function downloadFile(blob, filename) {
+export function downloadFile(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -68,13 +68,13 @@ export function downloadFile(blob, filename) {
 /**
  * 打开帮助模态框
  */
-export function openHelp() {
+export function openHelp(): void {
   if (dom.helpModal) dom.helpModal.classList.add('open');
 }
 
 /**
  * 关闭帮助模态框
  */
-export function closeHelp() {
+export function closeHelp(): void {
   if (dom.helpModal) dom.helpModal.classList.remove('open');
 }
