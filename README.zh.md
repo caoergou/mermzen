@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/caoergou/mermzen)](https://github.com/caoergou/mermzen/stargazers)
 
-**MermZen** 是一个简洁轻量的 Mermaid 图表编辑器。打开即用，写语法，看图表——体验就这么简单，没有多余的东西。
+**MermZen** 是一个专注纯粹的 Mermaid 图表编辑器。打开即写，即时渲染，无多余干扰——体验就这么简单。
 
 名称取自 **Mermaid**（图表语法）与 **Zen**（禅）——设计感与轻量化是它的核心。
 
