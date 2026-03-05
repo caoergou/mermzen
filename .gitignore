@@ -20,3 +20,5 @@ blog/en/*.html
 .dev/
 .playwright-mcp/
 test-highlight.html
+blog-csdn/
+dist/

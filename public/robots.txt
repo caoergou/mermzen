@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://example.github.io/mermzen/sitemap.xml
+Sitemap: https://eric.run.place/MermZen/sitemap.xml

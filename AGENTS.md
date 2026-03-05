@@ -4,79 +4,108 @@ This file provides guidance to AI agents (Claude, Cursor, etc.) when working wit
 
 ## 项目概述
 
-纯客户端的 Mermaid 图表编辑器，支持实时预览。无构建步骤、无包管理器、无框架，静态文件直接运行。通过 `.github/workflows/deploy.yml` 在推送到 `main` 分支时自动部署到 GitHub Pages。
+纯客户端的 Mermaid 图表编辑器，支持实时预览。使用 Vite 7 + TypeScript 构建，通过 `.github/workflows/deploy.yml` 在推送到 `main` 分支时自动部署到 GitHub Pages（自定义域名：https://eric.run.place/MermZen/）。
 
 ## 架构
 
-应用由 `index.html`、`style.css`、入口 `app.js` 和 `modules/` 目录下的模块组成，使用原生 ES 模块（无构建步骤）。
+应用由 `index.html`、`embed.html` 和 TypeScript 源代码组成，使用 Vite 进行构建和打包。
 
 ### 入口文件
 
-- `index.html` — 页面布局、工具栏、编辑器/预览面板、帮助弹窗、引导遮罩层。所有依赖通过 CDN（esm.sh）加载。
-- `app.js` — 主入口，负责启动引导（bootstrap）和全局快捷键绑定（`Ctrl+S` 保存对话框、`Ctrl+Shift+C` 复制 PNG、`Ctrl+Shift+F` 格式化、`Alt+1~4` 切换背景）。
-- `style.css` — 使用 CSS 变量管理主题，通过 `[data-theme="dark"]` 切换深色模式，响应式断点为 768px。
+- `index.html` — 主页面布局、工具栏、编辑器/预览面板、帮助弹窗、引导遮罩层。
+- `src/app.ts` — 主入口，负责启动引导（bootstrap）和全局快捷键绑定。
 - `embed.html` — 嵌入模式页面，仅显示图表预览，不含编辑器。
+- `src/embed.ts` — embed.html 对应的入口文件。
 
-### 模块 (`modules/`)
+### 目录结构
+
+```
+mermzen/
+├── src/
+│   ├── app.ts              ← 主入口（已完全 TypeScript）
+│   ├── embed.ts            ← embed.html 对应入口（已完全 TypeScript）
+│   ├── env.d.ts            ← Vite 类型声明
+│   ├── styles/
+│   │   └── fonts.css       ← 本地字体 @import
+│   └── modules/            ← 所有模块（已完全 TypeScript）
+│       ├── store.ts        ← 应用状态 + AppState 类型
+│       ├── render.ts       ← mermaid ES import
+│       ├── export.ts       ← pako ES import + SVGO
+│       ├── export-utils.ts ← SVG/PNG 导出工具（含 TypeScript 注释）
+│       ├── svgo-optimize.ts← SVGO v4 封装（browser 入口 + preset-default 配置）
+│       ├── editor.ts       ← CodeMirror 编辑器（已完全 TypeScript）
+│       ├── dom.ts          ← DOM 元素选择器模块
+│       ├── utils.ts        ← 通用工具函数
+│       ├── command-palette.ts
+│       ├── i18n.ts         ← 国际化模块
+│       ├── formatter.ts    ← 代码格式化
+│       ├── examples.ts     ← 示例代码
+│       ├── mermaid-highlight-ext.ts
+│       ├── tour.ts         ← 引导功能
+│       └── ui/             ← UI 模块（已完全 TypeScript）
+│           ├── context-menu.ts
+│           ├── layout.ts
+│           ├── menu.ts
+│           ├── mobile.ts
+│           ├── theme.ts
+│           └── zoom.ts
+├── scripts/                ← 全 TypeScript 脚本
+│   ├── build-blog.ts       ← 构建博客（markdown 转 HTML，带 iFrame 预览）
+│   ├── generate-preview-pngs.ts
+│   ├── generate-preview-svgs.ts
+│   └── generate-sitemap.sh
+├── public/
+│   ├── fonts/
+│   │   └── Virgil.woff2    ← 本地托管
+│   ├── logo.svg
+│   └── robots.txt
+├── modules/                ← 保留原始文件（旧版兼容）
+├── vite.config.ts          ← 构建配置（base: '/MermZen/'）
+├── tsconfig.json           ← 宽松的 TypeScript 配置
+├── tsconfig.node.json      ← Node.js 脚本的 TypeScript 配置（NodeNext）
+├── package.json
+├── index.html
+└── embed.html
+```
+
+### 模块 (`src/modules/`)
 
 | 文件 | 职责 |
 |------|------|
-| `store.js` | 全局状态（`state`）、平移缩放状态（`pz`）、手绘字体配置（`HAND_FONTS`）、常量（`MIN_SCALE`、`MAX_SCALE`）、手绘偏好读写（`saveHandDrawnPrefs`）、字体辅助函数 |
-| `dom.js` | 集中管理所有 DOM 元素引用（`dom` 对象） |
-| `utils.js` | 通用工具函数：`showToast`、`updateEditorStatus`、`setRenderStatus`、`btnSuccess`、`downloadFile`、`openHelp`、`closeHelp`、`escapeHtml` |
-| `i18n.js` | 国际化字符串（`STRINGS`）、`applyI18n()` |
-| `examples.js` | 示例图表数据（`EXAMPLES_ZH`、`EXAMPLES_EN`）、默认代码（`DEFAULT_CODE`） |
-| `editor.js` | CodeMirror 6 编辑器初始化、`getCode()`、`formatCode()`、`scheduleLint()` |
-| `formatter.js` | Mermaid 代码格式化器（`formatMermaidCode`），支持流程图、时序图、类图、状态图、甘特图、饼图、思维导图等多种图表类型 |
-| `render.js` | Mermaid 初始化/渲染（`initMermaid`、`renderDiagram`） |
-| `export-utils.js` | 字体内联（`inlineFontsIntoSvg`）、SVG→PNG 转换（`svgToPngBlob`）；支持手绘字体（Kalam/Virgil/Caveat）和小赖中文字体（Xiaolai SC）的 Base64 内联 |
-| `export.js` | 复制/下载 SVG/PNG（`copyPng`、`downloadSvg`、`downloadPng`）、URL 编码/解码（pako 压缩）、分享链接（`copyShareLink`）、嵌入代码（`copyEmbedCode`）；导出文件名包含图表类型和时间戳 |
-| `tour.js` | 交互式引导教程（`startTour`） |
-| `command-palette.js` | 命令面板（`Ctrl+K` / `openCmdPalette`） |
+| `store.ts` | 全局状态（`state`）、平移缩放状态（`pz`）、手绘字体配置（`HAND_FONTS`）、常量（`MIN_SCALE`、`MAX_SCALE`）、手绘偏好读写（`saveHandDrawnPrefs`）、字体辅助函数 |
+| `dom.ts` | 集中管理所有 DOM 元素引用（`dom` 对象） |
+| `utils.ts` | 通用工具函数：`showToast`、`updateEditorStatus`、`setRenderStatus`、`btnSuccess`、`downloadFile`、`openHelp`、`closeHelp`、`escapeHtml` |
+| `i18n.ts` | 国际化字符串（`STRINGS`）、`applyI18n()` |
+| `examples.ts` | 示例图表数据（`EXAMPLES_ZH`、`EXAMPLES_EN`）、默认代码（`DEFAULT_CODE`） |
+| `editor.ts` | CodeMirror 6 编辑器初始化、`getCode()`、`formatCode()`、`scheduleLint()` |
+| `formatter.ts` | Mermaid 代码格式化器（`formatMermaidCode`），支持多种图表类型 |
+| `render.ts` | Mermaid 初始化/渲染（`initMermaid`、`renderDiagram`） |
+| `export-utils.ts` | 字体内联（`inlineFontsIntoSvg`）、SVG→PNG 转换（`svgToPngBlob`） |
+| `export.ts` | 复制/下载 SVG/PNG（`copyPng`、`downloadSvg`、`downloadPng`）、URL 编码/解码（pako 压缩）、分享链接（`copyShareLink`）、嵌入代码（`copyEmbedCode`） |
+| `tour.ts` | 交互式引导教程（`startTour`） |
+| `command-palette.ts` | 命令面板（`Ctrl+K` / `openCmdPalette`） |
+| `svgo-optimize.ts` | SVGO v4 封装，用于 SVG 优化 |
+| `mermaid-highlight-ext.ts` | Mermaid 语法高亮扩展 |
 
-### 子目录 `modules/ui/`
+### 子目录 `src/modules/ui/`
 
 | 文件 | 职责 |
 |------|------|
-| `theme.js` | UI 主题切换（`applyUiTheme`、`toggleUiTheme`）、手绘模式切换（`toggleHandDrawn`）、Mermaid 主题切换（`switchTheme`）、预览背景切换（`switchPreviewBg`）、导出背景色（`getExportBgColor`）、预览区丸子按钮初始化（`initPreviewPills`） |
-| `layout.js` | 可拖动分割线初始化（`initLayout`），支持水平/垂直自适应布局 |
-| `menu.js` | 菜单栏交互（`initMenu`）：示例下拉、主题/背景/手绘菜单项、分享嵌入、帮助、命令面板、格式化等所有菜单动作；`closeAllMenus` |
-| `zoom.js` | 预览区缩放与平移（`initZoom`、`zoomTo`、`resetView`、`applyTransform`）；支持鼠标拖拽、滚轮缩放 |
-| `mobile.js` | 移动端标签页切换（`switchMobileTab`）、移动端溢出菜单（`initMobileUI`） |
-| `context-menu.js` | 预览区右键菜单（`initContextMenu`）：下载 PNG/SVG、复制 PNG |
+| `theme.ts` | UI 主题切换（`applyUiTheme`、`toggleUiTheme`）、手绘模式切换（`toggleHandDrawn`）、Mermaid 主题切换（`switchTheme`）、预览背景切换（`switchPreviewBg`） |
+| `layout.ts` | 可拖动分割线初始化（`initLayout`），支持水平/垂直自适应布局 |
+| `menu.ts` | 菜单栏交互（`initMenu`）：示例下拉、主题/背景/手绘菜单项、分享嵌入、帮助、命令面板、格式化等所有菜单动作 |
+| `zoom.ts` | 预览区缩放与平移（`initZoom`、`zoomTo`、`resetView`、`applyTransform`） |
+| `mobile.ts` | 移动端标签页切换（`switchMobileTab`）、移动端溢出菜单（`initMobileUI`） |
+| `context-menu.ts` | 预览区右键菜单（`initContextMenu`）：下载 PNG/SVG、复制 PNG |
 
-### 依赖关系（无循环引用）
+## 依赖
 
-```
-store.js      ← (无依赖)
-dom.js        ← (无依赖)
-utils.js      ← dom, store
-i18n.js       ← store
-examples.js   ← (无依赖)
-editor.js     ← store, dom, formatter
-formatter.js  ← (无依赖)
-render.js     ← store, dom, i18n, editor
-export-utils.js ← store, ui/theme
-export.js     ← store, dom, utils, i18n, editor, export-utils
-tour.js       ← store, i18n
-command-palette.js ← store, i18n, examples, render, export
-
-ui/theme.js   ← dom, store, render
-ui/layout.js  ← dom
-ui/zoom.js    ← dom, store
-ui/menu.js    ← store, dom, examples, export, utils, editor, render, i18n, ui/theme, ui/zoom, command-palette, tour
-ui/mobile.js  ← store, i18n, export, utils, ui/theme
-ui/context-menu.js ← dom, export, utils
-
-app.js        ← 所有模块
-```
-
-## 依赖（仅 CDN）
-
-- **Mermaid 11** — 图表渲染（通过全局 `mermaid` 变量）
+- **Mermaid 11** — 图表渲染（ES 模块 import）
 - **CodeMirror 6** — 编辑器，配合 `codemirror-lang-mermaid` 和 `@codemirror/theme-one-dark`
-- **pako** — URL 分享时的代码压缩（通过全局 `pako` 变量）
-- **手绘字体**：Kalam、Caveat（Google Fonts）、Virgil（jsDelivr）、Xiaolai SC（中文手绘字体，jsDelivr CDN 子集加载）
+- **pako** — URL 分享时的代码压缩（ES 模块 import）
+- **SVGO v4** — SVG 优化（ES 模块 import）
+- **@fontsource** — 本地化字体库：Outfit、JetBrains Mono、Kalam、Caveat（支持中文字体）
+- **Xiaolai SC** — 中文手绘字体（CDN 加载）
 
 ## 关键行为
 
@@ -112,23 +141,31 @@ blog/
 # 安装依赖
 npm install
 
+# 安装 Playwright 浏览器
+npx playwright install chromium --with-deps
+
 # 运行测试
 npx playwright test test-tour.spec.js
 ```
 
 - `playwright.config.js` — Playwright 配置，仅测试 `test-tour.spec.js`，使用 Chromium headless 模式
 - `test-tour.spec.js` — 引导教程 E2E 测试
-- `test-ui.js` — 其他 UI 测试脚本（非 Playwright 格式）
 
 ## 开发
 
-直接在浏览器中打开 `index.html`，或用任意静态文件服务器：
-
 ```bash
-python3 -m http.server
-```
+# 安装依赖
+npm install
 
-无构建、lint 命令；测试命令见上方"测试"章节。
+# 启动开发服务器（端口 5173）
+npm run dev
+
+# 构建生产版本（输出到 dist/）
+npm run build
+
+# 类型检查
+npm run type-check
+```
 
 ## 其他文件
 

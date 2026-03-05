@@ -48,7 +48,7 @@ function getCmdCommands() {
     { group: isZh ? '视图' : 'View', label: isZh ? '重置缩放' : 'Reset zoom', icon: 'zoom', action: resetView },
     { group: isZh ? '分享' : 'Share', label: isZh ? '嵌入代码' : 'Copy embed code', icon: 'share', action() { copyEmbedCode().catch(e => { showToast(s.toastFailed + ': ' + e.message); }); } },
     { group: isZh ? '帮助' : 'Help', label: isZh ? '示例与快捷键' : 'Examples & Shortcuts', icon: 'help', action: openHelp },
-    { group: isZh ? '帮助' : 'Help', label: 'GitHub', icon: 'github', action() { window.open('https://github.com/caoergou/mermaid-pic', '_blank'); } },
+    { group: isZh ? '帮助' : 'Help', label: 'GitHub', icon: 'github', action() { window.open('https://github.com/caoergou/MermZen', '_blank'); } },
   ];
 
   const examples = isZh ? EXAMPLES_ZH : EXAMPLES_EN;

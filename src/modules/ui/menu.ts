@@ -139,7 +139,7 @@ export function initMenu() {
   if (menuBlog) menuBlog.addEventListener('click', () => { closeAllMenus(); window.open(`blog/${state.currentLang}/index.html`, '_blank'); });
 
   const menuGithub = document.getElementById('menu-github');
-  if (menuGithub) menuGithub.addEventListener('click', () => { closeAllMenus(); window.open('https://github.com/caoergou/mermaid-pic', '_blank'); });
+  if (menuGithub) menuGithub.addEventListener('click', () => { closeAllMenus(); window.open('https://github.com/caoergou/MermZen', '_blank'); });
 
   const menuRestartTour = document.getElementById('btn-restart-tour-menu');
   if (menuRestartTour) menuRestartTour.addEventListener('click', () => { closeAllMenus(); startTour(); });
