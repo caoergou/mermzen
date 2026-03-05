@@ -16,7 +16,6 @@ function detectDiagramType(code: string): string {
   if (/^architecture/.test(first)) return 'architecture';
   if (/^block-beta\b/.test(first)) return 'block';
   if (/^timeline\b/.test(first)) return 'timeline';
-  if (/^xychart/.test(first)) return 'xychart';
   return 'generic';
 }
 
@@ -230,7 +229,6 @@ export function formatMermaidCode(code: string): string {
     case 'gantt':     formatted = formatSectionBased(code); break;
     case 'pie':       formatted = formatSectionBased(code); break;
     case 'timeline':  formatted = formatSectionBased(code); break;
-    case 'xychart':   formatted = formatSectionBased(code); break;
     case 'mindmap':   formatted = formatMindmap(code); break;
     default:          formatted = formatGeneric(code); break;
   }

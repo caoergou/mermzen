@@ -28,8 +28,6 @@ const DIAGRAM_TYPE_NAMES = {
   'architecture-beta': { zh: '架构图', en: 'Architecture' },
   quadrantChart: { zh: '象限图', en: 'Quadrant Chart' },
   'quadrant-chart': { zh: '象限图', en: 'Quadrant Chart' },
-  xyChart: { zh: 'XY图', en: 'XY Chart' },
-  'xy-chart': { zh: 'XY图', en: 'XY Chart' },
   requirementDiagram: { zh: '需求图', en: 'Requirement Diagram' },
   'requirement-diagram': { zh: '需求图', en: 'Requirement Diagram' },
   diagram: { zh: '图表', en: 'Diagram' },

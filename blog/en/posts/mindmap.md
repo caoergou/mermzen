@@ -158,7 +158,7 @@ mindmap
 
 ## Next Step
 
-After mastering mindmaps, continue learning [Mermaid XY Charts](xy.html) for data visualization and trend analysis.
+After mastering mindmaps, continue exploring other Mermaid diagram types based on your needs.
 
 ---
 

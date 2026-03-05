@@ -73,7 +73,7 @@ export async function renderDiagram() {
   }
   setRenderStatus('rendering', STRINGS[state.currentLang].renderingStatus);
 
-  const noHandDrawn = /^\s*(classDiagram|stateDiagram|erDiagram|gantt|pie|mindmap|timeline|xychart|architecture|block-beta|gitGraph)/i.test(code);
+  const noHandDrawn = /^\s*(classDiagram|stateDiagram|erDiagram|gantt|pie|mindmap|timeline|architecture|block-beta|gitGraph)/i.test(code);
   if (dom.handDrawnBtn) {
     if (state.handDrawn && noHandDrawn) {
       dom.handDrawnBtn.title = '此图类型不支持手绘风格 / Not supported for this diagram type';

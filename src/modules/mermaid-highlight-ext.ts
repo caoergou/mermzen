@@ -1,7 +1,7 @@
 /**
  * Mermaid 语法高亮扩展
  * 为 codemirror-lang-mermaid 未覆盖的图表类型添加基础关键字高亮
- * 支持：classDiagram, erDiagram, stateDiagram, gitGraph, timeline, xychart, architecture, block-beta
+ * 支持：classDiagram, erDiagram, stateDiagram, gitGraph, timeline, architecture, block-beta
  */
 
 import { StreamLanguage } from "@codemirror/language";
@@ -46,10 +46,6 @@ function createMermaidExtHighlighter() {
         }
         if (stream.match(/timeline/)) {
           state.diagramType = 'timeline';
-          return "keyword";
-        }
-        if (stream.match(/xychart(-beta)?/)) {
-          state.diagramType = 'xychart';
           return "keyword";
         }
         if (stream.match(/architecture(-beta)?/)) {
@@ -97,12 +93,6 @@ function createMermaidExtHighlighter() {
       // timeline 关键字
       if (state.diagramType === 'timeline') {
         if (stream.match(/^(title|section)/)) return "keyword";
-      }
-
-      // xychart 关键字
-      if (state.diagramType === 'xychart') {
-        if (stream.match(/^(title|x-axis|y-axis|line|bar)/)) return "keyword";
-        if (stream.match(/^\[.*?\]/)) return "bracket";
       }
 
       // architecture 关键字
