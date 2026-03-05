@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://example.github.io/mermzen/sitemap.xml

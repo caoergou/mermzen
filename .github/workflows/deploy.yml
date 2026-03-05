@@ -41,19 +41,22 @@ jobs:
           pip3 install fonttools brotli
           sudo apt-get install -y fonts-noto-cjk
 
-      - name: Start local HTTP server
+      - name: Build app (Vite)
+        run: npm run build
+
+      - name: Start Vite preview server
         run: |
-          python3 -m http.server 8766 &
+          npx vite preview --port 8766 &
           for i in $(seq 1 15); do
-            curl -s http://localhost:8766/ > /dev/null && echo "Server ready on :8766" && break
+            curl -s http://localhost:8766/ > /dev/null && echo "Preview server ready on :8766" && break
             sleep 1
           done
 
       - name: Generate preview SVGs
-        run: node scripts/generate-preview-svgs.js
+        run: npx tsx scripts/generate-preview-svgs.ts
 
       - name: Build blog posts (zh + en)
-        run: node scripts/build-blog.js
+        run: npx tsx scripts/build-blog.ts
 
       - name: Generate sitemap and robots.txt
         run: |
@@ -62,13 +65,22 @@ jobs:
           BASE_URL="https://eric.run.place/MermZen"
           ./scripts/generate-sitemap.sh "$BASE_URL"
 
+      - name: Copy static content into dist
+        run: |
+          # 预览图片（合并进 dist/assets/，与 Vite 打包产物共存）
+          [ -d assets ] && cp assets/* dist/assets/ 2>/dev/null || true
+          # 博客文章
+          [ -d blog ] && cp -r blog dist/blog 2>/dev/null || true
+          # sitemap
+          [ -f sitemap.xml ] && cp sitemap.xml dist/ || true
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'dist'
 
       - name: Deploy
         id: deployment

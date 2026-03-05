@@ -18,35 +18,9 @@
 
   <link rel="icon" type="image/svg+xml" href="logo.svg">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js" as="script">
-  <link rel="preconnect" href="https://esm.sh">
-  <!-- 优先加载 UI 字体和默认手绘字体 Kalam，Caveat/Virgil/LXGW 按需懒加载 -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Kalam:wght@400;700&display=swap">
-  <!-- 小赖（中文手绘字体）优先加载 -->
+  <!-- 小赖（中文手绘字体）保持 CDN 懒加载，仅 SVG 导出时使用 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chinese-fonts/xiaolai@3.0.0/dist/Xiaolai/result.css">
   <link rel="stylesheet" href="style.css">
-  <script type="importmap">
-  {
-    "imports": {
-      "codemirror": "https://esm.sh/codemirror@6.0.1/es2022/codemirror.mjs",
-      "@codemirror/state": "https://esm.sh/@codemirror/state@6",
-      "@codemirror/view": "https://esm.sh/@codemirror/view@6",
-      "@codemirror/language": "https://esm.sh/@codemirror/language@6",
-      "@codemirror/autocomplete": "https://esm.sh/@codemirror/autocomplete@6",
-      "@codemirror/commands": "https://esm.sh/@codemirror/commands@6",
-      "@codemirror/lint": "https://esm.sh/@codemirror/lint@6",
-      "@codemirror/search": "https://esm.sh/@codemirror/search@6",
-      "@codemirror/theme-one-dark": "https://esm.sh/@codemirror/theme-one-dark@6",
-      "@lezer/common": "https://esm.sh/@lezer/common@1",
-      "@lezer/highlight": "https://esm.sh/@lezer/highlight@1",
-      "@lezer/lr": "https://esm.sh/@lezer/lr@1",
-      "codemirror-lang-mermaid": "https://esm.sh/codemirror-lang-mermaid@0.5.0"
-    }
-  }
-  </script>
 </head>
 <body>
   <header class="toolbar">
@@ -386,8 +360,6 @@
     </div>
   </div>
 
-  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
-  <script type="module" src="app.js"></script>
+  <script type="module" src="/src/app.ts"></script>
 </body>
 </html>

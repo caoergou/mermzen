@@ -85,6 +85,12 @@ MermZen fills that gap: a CodeMirror 6 editor with Mermaid-aware syntax highligh
 
 ## Tech Stack
 
+- [Vite 7](https://vitejs.dev/) — build tool, dev server, and module bundler
+- [TypeScript](https://www.typescriptlang.org/) — type safety (gradual migration, JS modules coexist)
 - [Mermaid 11](https://mermaid.js.org/) — diagram rendering
 - [CodeMirror 6](https://codemirror.net/) — code editor
+- [SVGO](https://github.com/svg/svgo) — SVG optimization on export
+- [pako](https://github.com/nodeca/pako) — deflate compression for shareable URLs
+
+All production dependencies are bundled locally — no CDN required at runtime.
 

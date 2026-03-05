@@ -2,12 +2,18 @@
   "name": "mermaid-pic",
   "version": "1.0.0",
   "description": "[![Deploy to GitHub Pages](https://github.com/caoergou/mermaid-pic/actions/workflows/deploy.yml/badge.svg)](https://github.com/caoergou/mermaid-pic/actions/workflows/deploy.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/caoergou/mermaid-pic)](https://github.com/caoergou/mermaid-pic/stargazers)",
-  "main": "app.js",
+  "type": "module",
+  "main": "src/app.ts",
   "scripts": {
-    "build:blog": "node scripts/build-blog.js",
-    "build:svgs": "node scripts/generate-preview-svgs.js",
-    "build": "npm run build:blog",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "npm run dev",
+    "type-check": "tsc --noEmit",
+    "build:blog": "tsx scripts/build-blog.ts",
+    "build:svgs": "tsx scripts/generate-preview-svgs.ts",
+    "build:pngs": "tsx scripts/generate-preview-pngs.ts",
+    "build:all": "npm run build && npm run build:blog"
   },
   "repository": {
     "type": "git",
@@ -22,6 +28,32 @@
   "homepage": "https://github.com/caoergou/mermaid-pic#readme",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
-    "marked": "^17.0.3"
+    "@types/node": "^25.3.3",
+    "marked": "^17.0.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "^6.20.1",
+    "@codemirror/commands": "^6.10.2",
+    "@codemirror/language": "^6.12.2",
+    "@codemirror/lint": "^6.9.5",
+    "@codemirror/search": "^6.6.0",
+    "@codemirror/state": "^6.5.4",
+    "@codemirror/theme-one-dark": "^6.1.3",
+    "@codemirror/view": "^6.39.16",
+    "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource-variable/outfit": "^5.2.8",
+    "@fontsource/caveat": "^5.2.8",
+    "@fontsource/kalam": "^5.2.8",
+    "@lezer/common": "^1.5.1",
+    "@lezer/highlight": "^1.2.3",
+    "@lezer/lr": "^1.4.8",
+    "codemirror": "^6.0.2",
+    "codemirror-lang-mermaid": "^0.5.0",
+    "mermaid": "^11.12.3",
+    "pako": "^2.1.0",
+    "svgo": "^4.0.1"
   }
 }
