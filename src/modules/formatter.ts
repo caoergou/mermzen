@@ -2,7 +2,7 @@
 
 const INDENT = '    ';
 
-function detectDiagramType(code) {
+function detectDiagramType(code: string): string {
   const first = code.trim().split('\n')[0].trim().toLowerCase();
   if (/^(graph|flowchart)\b/.test(first)) return 'flowchart';
   if (/^sequencediagram\b/.test(first)) return 'sequence';
@@ -20,12 +20,12 @@ function detectDiagramType(code) {
   return 'generic';
 }
 
-function trimTrailing(line) {
+function trimTrailing(line: string): string {
   return line.replace(/\s+$/, '');
 }
 
-function collapseBlankLines(lines) {
-  const result = [];
+function collapseBlankLines(lines: string[]): string[] {
+  const result: string[] = [];
   let lastBlank = false;
   for (const line of lines) {
     if (line.trim() === '') {
@@ -44,9 +44,9 @@ function collapseBlankLines(lines) {
 const FLOW_BLOCK_OPEN = /^\s*subgraph\b/i;
 const FLOW_BLOCK_CLOSE = /^\s*end\s*$/i;
 
-function formatFlowchart(code) {
+function formatFlowchart(code: string): string {
   const lines = code.split('\n');
-  const result = [];
+  const result: string[] = [];
   let depth = 1;
 
   for (let i = 0; i < lines.length; i++) {
@@ -79,9 +79,9 @@ const SEQ_BLOCK_OPEN = /^\s*(loop|alt|else|opt|par|and|critical|break|rect|ref)\
 const SEQ_BLOCK_CLOSE = /^\s*end\s*$/i;
 const SEQ_DECLARATION = /^\s*(participant|actor)\b/i;
 
-function formatSequence(code) {
+function formatSequence(code: string): string {
   const lines = code.split('\n');
-  const result = [];
+  const result: string[] = [];
   let depth = 1;
 
   for (let i = 0; i < lines.length; i++) {
@@ -112,9 +112,9 @@ function formatSequence(code) {
 
 // ── Class diagram formatter ─────────────────────────────────────────
 
-function formatClass(code) {
+function formatClass(code: string): string {
   const lines = code.split('\n');
-  const result = [];
+  const result: string[] = [];
   let inBlock = false;
 
   for (let i = 0; i < lines.length; i++) {
@@ -145,9 +145,9 @@ function formatClass(code) {
 const STATE_BLOCK_OPEN = /^\s*state\b.*\{/i;
 const STATE_BLOCK_CLOSE = /^\s*\}/;
 
-function formatState(code) {
+function formatState(code: string): string {
   const lines = code.split('\n');
-  const result = [];
+  const result: string[] = [];
   let depth = 1;
 
   for (let i = 0; i < lines.length; i++) {
@@ -171,9 +171,9 @@ function formatState(code) {
 
 // ── Gantt / pie / timeline / xychart formatter ──────────────────────
 
-function formatSectionBased(code) {
+function formatSectionBased(code: string): string {
   const lines = code.split('\n');
-  const result = [];
+  const result: string[] = [];
 
   for (let i = 0; i < lines.length; i++) {
     const stripped = lines[i].trim();
@@ -190,9 +190,9 @@ function formatSectionBased(code) {
 
 // ── Mindmap formatter (preserve relative indentation) ───────────────
 
-function formatMindmap(code) {
+function formatMindmap(code: string): string {
   const lines = code.split('\n');
-  const result = [];
+  const result: string[] = [];
   for (let i = 0; i < lines.length; i++) {
     result.push(trimTrailing(lines[i]));
   }
@@ -201,9 +201,9 @@ function formatMindmap(code) {
 
 // ── Generic formatter (indent everything one level) ─────────────────
 
-function formatGeneric(code) {
+function formatGeneric(code: string): string {
   const lines = code.split('\n');
-  const result = [];
+  const result: string[] = [];
   for (let i = 0; i < lines.length; i++) {
     const stripped = lines[i].trim();
     if (stripped === '') { result.push(''); continue; }
@@ -215,12 +215,12 @@ function formatGeneric(code) {
 
 // ── Public API ──────────────────────────────────────────────────────
 
-export function formatMermaidCode(code) {
+export function formatMermaidCode(code: string): string {
   if (!code || !code.trim()) return code;
 
   const type = detectDiagramType(code);
 
-  let formatted;
+  let formatted: string;
   switch (type) {
     case 'flowchart': formatted = formatFlowchart(code); break;
     case 'sequence':  formatted = formatSequence(code); break;
