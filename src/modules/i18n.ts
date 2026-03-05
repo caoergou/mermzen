@@ -1,5 +1,6 @@
 import { state } from './store';
 import { updateEditorStatus as updateEditorStatusUtil } from './utils';
+import { renderExampleDropdown } from './ui/menu';
 
 export const STRINGS = {
   zh: {
@@ -100,6 +101,10 @@ export const STRINGS = {
     menuCommandPalette: '命令面板',
     menuGithub: 'GitHub',
     menuRestartTour: '重新引导',
+    menuLanguage: '语言',
+    menuChinese: '中文',
+    menuEnglish: 'English',
+    tooltipLanguage: '切换语言',
 
     // 命令面板翻译
     cmdExport: '导出',
@@ -221,6 +226,10 @@ export const STRINGS = {
     menuCommandPalette: 'Command palette',
     menuGithub: 'GitHub',
     menuRestartTour: 'Restart tour',
+    menuLanguage: 'Language',
+    menuChinese: '中文',
+    menuEnglish: 'English',
+    tooltipLanguage: 'Toggle language',
 
     // 命令面板翻译
     cmdExport: 'Export',
@@ -274,7 +283,8 @@ export function applyI18n() {
     'menuHanddrawnFontHint', 'menuSizeSmall', 'menuSizeMedium', 'menuSizeLarge',
     'menuFixedLines', 'menuRandomLines', 'menuReshuffle', 'menuFormatCode',
     'menuToggleDarkLight', 'menuDiagramTheme', 'menuResetZoom', 'menuPreviewBackground',
-    'menuMermaidTutorial', 'menuShortcuts', 'menuCommandPalette', 'menuGithub', 'menuRestartTour'
+    'menuMermaidTutorial', 'menuShortcuts', 'menuCommandPalette', 'menuGithub', 'menuRestartTour',
+    'menuLanguage', 'menuChinese', 'menuEnglish'
   ];
 
   menuKeys.forEach(key => {
@@ -325,7 +335,30 @@ export function applyI18n() {
   const keys = ['shortcutSave', 'shortcutCopyPng', 'shortcutFormat', 'shortcutCmdPalette'];
   tds.forEach((td, i) => { if (keys[i]) td.textContent = s[keys[i]]; });
   updateEditorStatusUtil();
-  if (typeof (window as any).renderExampleDropdown === 'function') {
-    (window as any).renderExampleDropdown();
+}
+
+/**
+ * 切换语言
+ */
+export function switchLanguage(lang: 'zh' | 'en') {
+  state.currentLang = lang;
+  localStorage.setItem('mermzen-lang', lang);
+  syncLanguageUI();
+  applyI18n();
+  renderExampleDropdown();
+}
+
+/**
+ * 同步语言按钮 UI 状态
+ */
+export function syncLanguageUI() {
+  // 更新 Help 菜单中的语言选项
+  const menuLangZh = document.getElementById('menu-lang-zh');
+  const menuLangEn = document.getElementById('menu-lang-en');
+  if (menuLangZh) {
+    menuLangZh.classList.toggle('active', state.currentLang === 'zh');
+  }
+  if (menuLangEn) {
+    menuLangEn.classList.toggle('active', state.currentLang === 'en');
   }
 }

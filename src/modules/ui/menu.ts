@@ -5,7 +5,7 @@ import { copyPng, downloadSvg, downloadPng, copyShareLink, copyEmbedCode, update
 import { showToast, btnSuccess } from '../utils';
 import { getCode, formatCode } from '../editor';
 import { initMermaid, renderDiagram } from '../render';
-import { STRINGS } from '../i18n';
+import { STRINGS, switchLanguage, syncLanguageUI } from '../i18n';
 import { openHelp, switchTheme, switchPreviewBg, toggleHandDrawn, toggleUiTheme } from './theme';
 import { resetView as zoomResetView } from './zoom';
 import { openCmdPalette } from '../command-palette';
@@ -60,6 +60,28 @@ const EXAMPLE_ICONS = {
 };
 
 /**
+ * 渲染示例下拉菜单
+ */
+export function renderExampleDropdown() {
+  const exDropdownPanel = document.getElementById('example-dropdown-panel');
+  if (!exDropdownPanel) return;
+
+  exDropdownPanel.innerHTML = '';
+  const examples = state.currentLang === 'zh' ? EXAMPLES_ZH : EXAMPLES_EN;
+  examples.forEach(ex => {
+    const item = document.createElement('button');
+    item.className = 'example-dropdown__item';
+    item.innerHTML = (EXAMPLE_ICONS[ex.label] || '') + '<span>' + ex.label + '</span>';
+    const exDropdown = document.getElementById('example-dropdown');
+    item.addEventListener('click', () => {
+      if (state.editorView) state.editorView.dispatch({ changes: { from: 0, to: state.editorView.state.doc.length, insert: ex.code } });
+      if (exDropdown) exDropdown.classList.remove('open');
+    });
+    exDropdownPanel.appendChild(item);
+  });
+}
+
+/**
  * 初始化菜单栏逻辑
  */
 export function initMenu() {
@@ -69,18 +91,7 @@ export function initMenu() {
   const exDropdownPanel = document.getElementById('example-dropdown-panel');
 
   if (exDropdownPanel) {
-    exDropdownPanel.innerHTML = '';
-    const examples = state.currentLang === 'zh' ? EXAMPLES_ZH : EXAMPLES_EN;
-    examples.forEach(ex => {
-      const item = document.createElement('button');
-      item.className = 'example-dropdown__item';
-      item.innerHTML = (EXAMPLE_ICONS[ex.label] || '') + '<span>' + ex.label + '</span>';
-      item.addEventListener('click', () => {
-        if (state.editorView) state.editorView.dispatch({ changes: { from: 0, to: state.editorView.state.doc.length, insert: ex.code } });
-        exDropdown.classList.remove('open');
-      });
-      exDropdownPanel.appendChild(item);
-    });
+    renderExampleDropdown();
   }
 
   function positionExDropdown() {
@@ -258,4 +269,32 @@ export function initMenu() {
       closeAllMenus();
     });
   }
+
+  // 语言切换按钮
+  const menuLangZh = document.getElementById('menu-lang-zh');
+  const menuLangEn = document.getElementById('menu-lang-en');
+  if (menuLangZh) {
+    menuLangZh.addEventListener('click', () => {
+      switchLanguage('zh');
+      closeAllMenus();
+    });
+  }
+  if (menuLangEn) {
+    menuLangEn.addEventListener('click', () => {
+      switchLanguage('en');
+      closeAllMenus();
+    });
+  }
+
+  // 右上角语言快速切换按钮
+  const langToggleQuick = document.getElementById('lang-toggle-quick');
+  if (langToggleQuick) {
+    langToggleQuick.addEventListener('click', () => {
+      const newLang = state.currentLang === 'zh' ? 'en' : 'zh';
+      switchLanguage(newLang);
+    });
+  }
+
+  // 初始化语言 UI 状态
+  syncLanguageUI();
 }
