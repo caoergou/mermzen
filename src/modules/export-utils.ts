@@ -268,60 +268,45 @@ export function svgToPngBlob(svgEl: SVGElement, scale?: number) {
       img.crossOrigin = 'anonymous';
 
       img.onload = () => {
-        const bgType = state.previewBg;
+        const bgColor = getExportBgColor();
         const canvas = document.createElement('canvas');
         canvas.width = width * scale;
         canvas.height = height * scale;
-        const ctx = canvas.getContext('2d', { willReadFrequently: false, alpha: bgType === 'checker' });
+        const ctx = canvas.getContext('2d', { willReadFrequently: false, alpha: bgColor === 'transparent' });
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
 
         // 根据背景类型绘制背景
-        if (bgType === 'checker') {
-          // 绘制棋盘格背景
-          const checkSize = 16 * scale;
-          const lightColor = getComputedStyle(document.documentElement).getPropertyValue('--preview-bg-checker').trim() || '#e8e8e8';
-          const darkColor = getComputedStyle(document.documentElement).getPropertyValue('--preview-bg').trim() || '#ffffff';
-
-          for (let x = 0; x < canvas.width; x += checkSize) {
-            for (let y = 0; y < canvas.height; y += checkSize) {
-              const isDark = ((Math.floor(x / checkSize) + Math.floor(y / checkSize)) % 2 === 1);
-              ctx.fillStyle = isDark ? lightColor : darkColor;
-              ctx.fillRect(x, y, checkSize, checkSize);
-            }
-          }
-        } else if (bgType === 'grid') {
-          // 绘制网格背景
-          const gridSize = 20 * scale;
-          const gridColor = document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-          const bgColor = document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e1e1e' : '#ffffff';
-
+        if (bgColor !== 'transparent') {
+          // 绘制纯色背景（黑色或白色）
           ctx.fillStyle = bgColor;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          ctx.strokeStyle = gridColor;
-          ctx.lineWidth = 1;
+          // 如果是网格背景，在纯色背景上绘制网格
+          if (state.previewBg === 'grid') {
+            const gridSize = 20 * scale;
+            const gridColor = document.documentElement.getAttribute('data-theme') === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
 
-          for (let x = 0; x <= canvas.width; x += gridSize) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-            ctx.stroke();
-          }
+            ctx.strokeStyle = gridColor;
+            ctx.lineWidth = 1;
 
-          for (let y = 0; y <= canvas.height; y += gridSize) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-            ctx.stroke();
+            for (let x = 0; x <= canvas.width; x += gridSize) {
+              ctx.beginPath();
+              ctx.moveTo(x, 0);
+              ctx.lineTo(x, canvas.height);
+              ctx.stroke();
+            }
+
+            for (let y = 0; y <= canvas.height; y += gridSize) {
+              ctx.beginPath();
+              ctx.moveTo(0, y);
+              ctx.lineTo(canvas.width, y);
+              ctx.stroke();
+            }
           }
         } else {
-          // 绘制纯色背景
-          const bg = getExportBgColor();
-          if (bg !== 'transparent') {
-            ctx.fillStyle = bg;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-          }
+          // 透明背景：不绘制任何背景，保持透明
+          // 棋盘格背景在预览时用于视觉效果，但导出时应该保持透明
         }
 
         ctx.scale(scale, scale);
