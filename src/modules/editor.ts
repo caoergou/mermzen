@@ -145,8 +145,9 @@ function getLanguageSupport(code) {
  * 创建编辑器实例
  * @param {string} initialCode - 初始代码
  * @param {(doc: string) => void} onDocChange - 文档变更回调
+ * @param {() => void} onReady - 编辑器创建完成回调（可选）
  */
-export function createEditor(initialCode, onDocChange) {
+export function createEditor(initialCode, onDocChange, onReady?: () => void) {
   // 只在需要时添加扩展，减少初始化时间
   const extensions = [
     basicSetup,
@@ -183,6 +184,8 @@ export function createEditor(initialCode, onDocChange) {
       state: EditorState.create({ doc: initialCode, extensions }),
       parent: dom.editorContainer,
     });
+    // 编辑器创建完成后调用 onReady 回调
+    if (onReady) onReady();
   }, 50);
 }
 

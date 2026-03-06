@@ -107,6 +107,23 @@ mermzen/
 - **@fontsource** — 本地化字体库：Outfit、JetBrains Mono、Kalam、Caveat（支持中文字体）
 - **Xiaolai SC** — 中文手绘字体（CDN 加载）
 
+## URL 查询参数
+
+应用支持以下 URL 查询参数，便于 AI 代理测试和自动化场景：
+
+| 参数 | 值 | 说明 |
+|------|-----|------|
+| `skipTour` | `1` 或 `true` | 跳过新手引导，直接进入编辑器 |
+| `lang` | `zh` 或 `en` | 设置界面语言（中文/英文） |
+
+**使用示例：**
+- 跳过引导：`https://eric.run.place/MermZen/?skipTour=1`
+- 设置英文：`https://eric.run.place/MermZen/?lang=en`
+- 组合使用：`https://eric.run.place/MermZen/?skipTour=1&lang=en`
+
+**AI 代理测试建议：**
+在进行自动化测试时，建议使用 `skipTour=1` 参数跳过引导流程，避免多步骤交互。
+
 ## 关键行为
 
 - 输入后 300ms 防抖渲染，也可通过 `Ctrl+Enter` 手动触发
@@ -115,7 +132,7 @@ mermzen/
 - 导出文件名格式：`{图表类型}-{YYYYMMDD-HHmmss}.{ext}`
 - URL 分享：使用 pako 压缩后 base64url 编码，存于 `location.hash`；同时 localStorage 持久化（key: `mermzen-code`）
 - 主题/手绘偏好持久化到 localStorage（key: `mermzen-handdrawn`、`mermzen-lang`）
-- 引导教程仅在首次访问时自动启动（标记 key: `mermzen-tour-seen`）
+- 引导教程仅在首次访问时自动启动（标记 key: `mermzen-tour-seen`），可通过 `skipTour=1` 参数跳过
 - 响应式：`≤768px` 时切换为移动端标签页模式（编辑器/预览二选一）
 
 ## 博客 (`blog/`)

@@ -294,7 +294,7 @@ export function applyI18n() {
   });
 
   // 命令面板占位符翻译
-  const cmdInput = document.getElementById('cmd-palette-input');
+  const cmdInput = document.getElementById('cmd-palette-input') as HTMLInputElement | null;
   if (cmdInput) {
     cmdInput.placeholder = s.cmdPlaceholder;
   }

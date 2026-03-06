@@ -89,6 +89,17 @@ document.addEventListener('keydown', e => {
 
 // ── 引导程序 ───────────────────────────────────────────────────────
 async function bootstrap() {
+  // 解析 URL 查询参数
+  const urlParams = new URLSearchParams(location.search);
+  const skipTourParam = urlParams.get('skipTour');
+  const langParam = urlParams.get('lang');
+
+  // 处理语言参数
+  if (langParam && (langParam === 'zh' || langParam === 'en')) {
+    state.currentLang = langParam;
+    localStorage.setItem('mermzen-lang', langParam);
+  }
+
   const urlState = getHashState() || getQueryState();
   if (urlState && urlState.settings) {
     const s = urlState.settings;
@@ -125,14 +136,18 @@ async function bootstrap() {
       setRenderStatus('rendering', '...');
       clearTimeout(state.renderTimeout);
       state.renderTimeout = setTimeout(renderDiagram, 300);
+    }, () => {
+      // 编辑器创建完成后，更新状态并渲染图表
+      updateEditorStatus();
+      renderDiagram();
     });
-
-    updateEditorStatus();
-    renderDiagram();
   }, 50);
 
   if (window.innerWidth <= 768) switchMobileTab('editor');
-  if (!localStorage.getItem('mermzen-tour-seen')) {
+
+  // 检查是否跳过引导（通过 URL 参数或 localStorage）
+  const shouldSkipTour = skipTourParam === '1' || skipTourParam === 'true' || localStorage.getItem('mermzen-tour-seen');
+  if (!shouldSkipTour) {
     if (window.innerWidth <= 768) {
       // 移动端只显示语言选择
       setTimeout(() => {
