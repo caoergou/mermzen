@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Language Test</title>
+    <script>
+        // Test that the logic works
+        const state = { currentLang: 'zh' };
+        
+        // Simulate URL with lang=en
+        const urlParams = new URLSearchParams('?lang=en');
+        const langParam = urlParams.get('lang');
+        
+        if (langParam && (langParam === 'zh' || langParam === 'en')) {
+            state.currentLang = langParam;
+            console.log('Language set to:', state.currentLang);
+        }
+        
+        // Check localStorage
+        console.log('localStorage lang:', localStorage.getItem('mermzen-lang'));
+    </script>
+</head>
+<body>
+    <h1>Language Test</h1>
+    <p>Check console for results</p>
+</body>
+</html>
