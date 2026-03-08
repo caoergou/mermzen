@@ -167,6 +167,8 @@ export async function renderDiagram() {
     document.documentElement.style.removeProperty('--mermaid-font');
   }
 
+  // 确保手绘字体已加载
+  // 所有字体已通过 src/styles/fonts.css 全局预加载
   if (state.handDrawn && !noHandDrawn) {
     const preset = HAND_FONTS[state.handDrawnFont] || HAND_FONTS.kalam;
     ensureHandDrawnFont(state.handDrawnFont);
