@@ -3,11 +3,10 @@
  * 依赖：Vite preview 服务需在 8766 端口运行
  *
  * 用法：
- * npx tsx scripts/generate-preview-pngs.ts [port] [--grid]
+ * npx tsx scripts/generate-preview-pngs.ts [port]
  *
  * 参数：
  *   port  - 服务端口，默认 8766
- *   --grid - 使用网格背景（默认白色背景）
  */
 import { chromium } from '@playwright/test';
 import fs from 'fs';
@@ -21,13 +20,13 @@ const __dirname = path.dirname(__filename);
 // Parse command line arguments
 const args = process.argv.slice(2);
 const port = args.find(a => !a.startsWith('--')) ? parseInt(args.find(a => !a.startsWith('--'))!, 10) : 8766;
-const useGridBackground = args.includes('--grid');
 
 interface DiagramDef {
   name: string;
   width: number;
   height: number;
   code: string;
+  bg?: string; // 'grid' | custom color, defaults to transparent
 }
 
 function encodeForEmbed(code: string, bg?: string): string {
@@ -167,6 +166,7 @@ const DIAGRAMS: DiagramDef[] = [
     name: 'preview-sequence',
     width: 1200,
     height: 800,
+    bg: 'grid',
     code: `sequenceDiagram
     actor 用户
     participant 浏览器
@@ -194,6 +194,7 @@ const DIAGRAMS: DiagramDef[] = [
     name: 'preview-sequence-en',
     width: 1200,
     height: 800,
+    bg: 'grid',
     code: `sequenceDiagram
     actor User
     participant Browser
@@ -224,10 +225,7 @@ async function generatePNGs(): Promise<void> {
 
   const browser = await chromium.launch();
 
-  // Determine background from command line
-  const bg = useGridBackground ? 'grid' : undefined;
-
-  for (const { name, code, width, height } of DIAGRAMS) {
+  for (const { name, code, width, height, bg } of DIAGRAMS) {
     console.log(`\nRendering ${name}.png...`);
 
     // Use deviceScaleFactor: 2 for high-DPI screenshots
