@@ -90,8 +90,7 @@ jobs:
           This PR was automatically created by the CI workflow.
           EOF
           )" \
-          --base main \
-          --label "automated"
+          --base main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
