@@ -118,12 +118,14 @@ export function getHandDrawnFontSizePx(): string {
 
 /**
  * 解析并获取当前的手绘随机种子
+ *
+ * 注意：在 random 模式下，只返回随机值而不更新状态，
+ * 避免触发副作用导致的无限渲染循环
  */
 export function resolveHandDrawnSeed(): number {
   if ($handDrawnSeedMode.get() === 'random') {
-    const newSeed = Math.floor(Math.random() * 10000);
-    $handDrawnSeed.set(newSeed);
-    return newSeed;
+    // 直接返回随机值，不更新状态，避免触发 scheduleRender 循环
+    return Math.floor(Math.random() * 10000);
   }
   return $handDrawnSeed.get();
 }
