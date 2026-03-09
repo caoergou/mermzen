@@ -1,6 +1,12 @@
 /**
  * 生成 PNG 预览图用于 README
  * 依赖：Vite preview 服务需在 8766 端口运行
+ *
+ * 用法：
+ * npx tsx scripts/generate-preview-pngs.ts [port]
+ *
+ * 参数：
+ *   port  - 服务端口，默认 8766
  */
 import { chromium } from '@playwright/test';
 import fs from 'fs';
@@ -11,19 +17,22 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Get port from command line arguments, default to 8766
-const port = process.argv[2] ? parseInt(process.argv[2], 10) : 8766;
+// Parse command line arguments
+const args = process.argv.slice(2);
+const port = args.find(a => !a.startsWith('--')) ? parseInt(args.find(a => !a.startsWith('--'))!, 10) : 8766;
 
 interface DiagramDef {
   name: string;
   width: number;
   height: number;
   code: string;
+  bg?: string; // 'grid' | custom color, defaults to transparent
 }
 
-function encodeForEmbed(code: string): string {
-  const payload = JSON.stringify({ v: 2, c: code });
-  const compressed = zlib.deflateSync(Buffer.from(payload, 'utf-8'));
+function encodeForEmbed(code: string, bg?: string): string {
+  const payload: { v: number; c: string; bg?: string } = { v: 2, c: code };
+  if (bg && bg !== 'transparent') payload.bg = bg;
+  const compressed = zlib.deflateSync(Buffer.from(JSON.stringify(payload), 'utf-8'));
   return compressed.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
 
@@ -157,6 +166,7 @@ const DIAGRAMS: DiagramDef[] = [
     name: 'preview-sequence',
     width: 1200,
     height: 800,
+    bg: 'grid',
     code: `sequenceDiagram
     actor 用户
     participant 浏览器
@@ -184,6 +194,7 @@ const DIAGRAMS: DiagramDef[] = [
     name: 'preview-sequence-en',
     width: 1200,
     height: 800,
+    bg: 'grid',
     code: `sequenceDiagram
     actor User
     participant Browser
@@ -214,7 +225,7 @@ async function generatePNGs(): Promise<void> {
 
   const browser = await chromium.launch();
 
-  for (const { name, code, width, height } of DIAGRAMS) {
+  for (const { name, code, width, height, bg } of DIAGRAMS) {
     console.log(`\nRendering ${name}.png...`);
 
     // Use deviceScaleFactor: 2 for high-DPI screenshots
@@ -224,7 +235,7 @@ async function generatePNGs(): Promise<void> {
     });
     const page = await context.newPage();
 
-    const encoded = encodeForEmbed(code);
+    const encoded = encodeForEmbed(code, bg);
     const url = `${BASE_URL}/MermZen/embed.html#${encoded}`;
 
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });

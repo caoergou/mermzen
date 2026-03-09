@@ -53,7 +53,13 @@ if (!encoded) {
       }
     } catch (e) {}
 
-    if (bg !== 'transparent') document.body.style.background = bg;
+    if (bg === 'grid') {
+      document.body.style.background = '#ffffff';
+      document.body.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)';
+      document.body.style.backgroundSize = '20px 20px';
+    } else if (bg !== 'transparent') {
+      document.body.style.background = bg;
+    }
 
     mermaid.initialize({
       startOnLoad: false,
