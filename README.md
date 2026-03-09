@@ -64,7 +64,7 @@ MermZen supports a rich set of themes and style combinations to easily meet diff
 
 <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 20px;">
   <div style="flex: 1; text-align: center;">
-    <img src="assets/preview-sequence-en.png" alt="Hand-drawn style + Grid background" style="max-width: 400px; width: 80%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); background-image: linear-gradient(#f0f0f0 1px, transparent 1px), linear-gradient(90deg, #f0f0f0 1px, transparent 1px); background-size: 20px 20px;" loading="lazy">
+    <img src="assets/preview-sequence-en.png" alt="Hand-drawn style + Grid background" style="max-width: 400px; width: 80%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);" loading="lazy">
   </div>
   <div style="flex: 1;">
     <h4>🧩 <a href="https://eric.run.place/MermZen/#H4sIAAAAAAAAA61TTY/TMBD9K5RXQQgJCQA0gEC6oBqL1ddNlTpLqk90xYbEtluyrEiv99xO2kS7dOGFjJmff9+bN39swYbXSpN6pUqZKkZapzJmGCEUzmVCutTGNRlSWqgU99cU/Gttbuel22KWdbPWm1DIzKYkjMdbGbS3OJEM0vLt6kb9ql8/dEtpfOel9NjfR9S9ntuYVvU6i/Xv9ls+/y1sfZ/JPF/M6z/P8nl/H5z/P63/P9X/P9n/P93/P+3/P/X/P/H/P/+f/H/P//HwD5/KfH/CgB8AAA==?bg=grid" target="_blank">Hand-drawn Style + Grid Background</a></h4>

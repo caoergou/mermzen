@@ -8,9 +8,10 @@
  * 5. 校验生成的截图文件大小，失败时不覆盖原有文件
  *
  * 用法：
- * npm run build:screenshots          # 生成所有截图
+ * npm run build:screenshots          # 生成所有截图（白色背景）
  * npm run build:screenshots editor   # 仅生成编辑器截图
- * npm run build:screenshots preview  # 仅生成预览图
+ * npm run build:screenshots preview  # 仅生成预览图（白色背景）
+ * npm run build:screenshots preview --grid  # 生成预览图（网格背景）
  */
 
 import { spawn, ChildProcess } from 'child_process';
@@ -109,9 +110,10 @@ async function main() {
   const args = process.argv.slice(2);
   const generateEditor = args.length === 0 || args.includes('editor');
   const generatePreview = args.length === 0 || args.includes('preview');
+  const useGridBackground = args.includes('--grid');
 
   console.log('🚀 开始自动构建截图流程...');
-  console.log(`📝 生成类型: ${generateEditor ? '编辑器截图' : ''} ${generatePreview ? '预览图' : ''}`);
+  console.log(`📝 生成类型: ${generateEditor ? '编辑器截图' : ''} ${generatePreview ? '预览图' : ''} ${useGridBackground ? '(网格背景)' : '(白色背景)'}`);
 
   // 1. 构建最新代码
   console.log('\n📦 构建最新代码...');
@@ -151,7 +153,11 @@ async function main() {
     // 5. 生成预览图
     if (generatePreview) {
       console.log('\n🖼️  生成预览图...');
-      const previewResult = await runCommand('npx', ['tsx', 'scripts/generate-preview-pngs.ts', port.toString()]);
+      const previewArgs = ['tsx', 'scripts/generate-preview-pngs.ts', port.toString()];
+      if (useGridBackground) {
+        previewArgs.push('--grid');
+      }
+      const previewResult = await runCommand('npx', previewArgs);
       if (previewResult.code !== 0) {
         console.error('❌ 预览图生成失败');
       } else {

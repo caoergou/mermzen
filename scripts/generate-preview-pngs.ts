@@ -1,6 +1,13 @@
 /**
  * 生成 PNG 预览图用于 README
  * 依赖：Vite preview 服务需在 8766 端口运行
+ *
+ * 用法：
+ * npx tsx scripts/generate-preview-pngs.ts [port] [--grid]
+ *
+ * 参数：
+ *   port  - 服务端口，默认 8766
+ *   --grid - 使用网格背景（默认白色背景）
  */
 import { chromium } from '@playwright/test';
 import fs from 'fs';
@@ -11,8 +18,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Get port from command line arguments, default to 8766
-const port = process.argv[2] ? parseInt(process.argv[2], 10) : 8766;
+// Parse command line arguments
+const args = process.argv.slice(2);
+const port = args.find(a => !a.startsWith('--')) ? parseInt(args.find(a => !a.startsWith('--'))!, 10) : 8766;
+const useGridBackground = args.includes('--grid');
 
 interface DiagramDef {
   name: string;
@@ -21,9 +30,10 @@ interface DiagramDef {
   code: string;
 }
 
-function encodeForEmbed(code: string): string {
-  const payload = JSON.stringify({ v: 2, c: code });
-  const compressed = zlib.deflateSync(Buffer.from(payload, 'utf-8'));
+function encodeForEmbed(code: string, bg?: string): string {
+  const payload: { v: number; c: string; bg?: string } = { v: 2, c: code };
+  if (bg && bg !== 'transparent') payload.bg = bg;
+  const compressed = zlib.deflateSync(Buffer.from(JSON.stringify(payload), 'utf-8'));
   return compressed.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
 
@@ -214,6 +224,9 @@ async function generatePNGs(): Promise<void> {
 
   const browser = await chromium.launch();
 
+  // Determine background from command line
+  const bg = useGridBackground ? 'grid' : undefined;
+
   for (const { name, code, width, height } of DIAGRAMS) {
     console.log(`\nRendering ${name}.png...`);
 
@@ -224,7 +237,7 @@ async function generatePNGs(): Promise<void> {
     });
     const page = await context.newPage();
 
-    const encoded = encodeForEmbed(code);
+    const encoded = encodeForEmbed(code, bg);
     const url = `${BASE_URL}/MermZen/embed.html#${encoded}`;
 
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
