@@ -11,7 +11,7 @@ slug: block
 
 块图用于可视化复杂系统的组件结构、层次关系和连接方式，适合系统架构设计、网络拓扑、工业流程图等场景。Mermaid 使用 `block-beta` 关键字声明块图。
 
-<iframe src="https://eric.run.place/MermZen/embed.html#eJyrVipTsjLSUUpWslJKyslPznZKLUmMyVNQUFAoySzJSVV4Onf609n7ni1of7lohlItAHbLEwo" width="100%" height="600" frameborder="0"></iframe>
+<iframe src="https://eric.run.place/MermZen/embed.html#eJyrVipTslIw0lFQSgbSSkk5-cnZukmpJYkxeQpAUJJZkpOqEFNqam5qDiTN0lJjSs0sDIBsSwtLC6VaADjDEjk" width="100%" height="600" frameborder="0"></iframe>
 
 ## 声明图表
 
@@ -21,7 +21,7 @@ slug: block
 block-beta
     title 块图标题
 ```
-<a href="https://eric.run.place/MermZen/#eJyrVipTsjLSUUpWslJKyslPznZKLUmMyVNQUFAoySzJSVV4Onf609n7ni1of7lohlItAHbLEwo" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
+<a href="https://eric.run.place/MermZen/#eJyrVipTslIw0lFQSgbSSkk5-cnZukmpJYkxeQpAUJJZkpOqEFNqam5qDiTN0lJjSs0sDIBsSwtLC6VaADjDEjk" target="_blank" rel="noopener" class="try-in-editor">在 MermZen 中试试 →</a>
 
 ## 基本块定义
 
